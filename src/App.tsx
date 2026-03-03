@@ -726,7 +726,7 @@ const About = () => (
         <div className="relative">
           <div className="aspect-square rounded-2xl overflow-hidden">
             <img
-              src="/profile.jpg"
+              src={`${import.meta.env.BASE_URL}profile.jpg`}
               alt="Alexander Rheindorf"
               className="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
             />
