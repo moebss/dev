@@ -194,12 +194,12 @@ const Hero = () => {
           <p className="text-xl text-zinc-400 mb-8 font-mono min-h-[1.5em]">
             {text}<span className="animate-pulse">_</span>
           </p>
-          <div className="flex flex-wrap gap-4">
-            <a href="#contact" className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all flex items-center gap-2 group">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+            <a href="#contact" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all gap-2 group">
               Kostenloses Erstgespräch
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#projects" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
+            <a href="#projects" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
               Arbeiten ansehen
             </a>
           </div>
@@ -341,7 +341,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-24 bg-[#0d0d0d]">
+    <section id="services" className="py-16 md:py-24 bg-[#0d0d0d]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16">
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Leistungen</h2>
@@ -394,7 +394,7 @@ const WorkflowsPreview = () => {
   });
 
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Workflows Section */}
         <div className="flex items-end justify-between mb-16">
@@ -487,7 +487,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-24 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-emerald-500/15 blur-[150px] rounded-full pointer-events-none" />
 
@@ -649,7 +649,7 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-24 bg-[#0d0d0d]">
+    <section id="faq" className="py-16 md:py-24 bg-[#0d0d0d]">
       <div className="max-w-3xl mx-auto px-6">
         <div className="mb-16 text-center">
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">FAQ</h2>
@@ -720,7 +720,7 @@ const Footer = ({ onShowImpressum, onShowDatenschutz }: { onShowImpressum: () =>
 );
 
 const About = () => (
-  <section id="about" className="py-24 bg-[#0d0d0d]">
+  <section id="about" className="py-16 md:py-24 bg-[#0d0d0d]">
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <div className="relative">
@@ -797,7 +797,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-24">
+    <section id="testimonials" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Kundenstimmen</h2>
@@ -865,7 +865,7 @@ const BlogPreview = ({ onNavigate }: { onNavigate: (hash: string) => void }) => 
   const latestPosts = blogPosts.slice(0, 3);
 
   return (
-    <section className="py-24 bg-[#0d0d0d]">
+    <section className="py-16 md:py-24 bg-[#0d0d0d]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-end justify-between mb-16">
           <div>
