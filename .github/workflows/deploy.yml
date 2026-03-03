@@ -31,8 +31,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: |
-          rm -rf package-lock.json node_modules
-          npm install
+          npm ci || npm install
+          npm install @tailwindcss/oxide-linux-x64-gnu --no-save
       - name: Build
         run: npm run build
       - name: Upload artifact
