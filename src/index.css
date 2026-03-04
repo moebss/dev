@@ -5,24 +5,118 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ── Theme Tokens ── */
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-card: rgba(0, 0, 0, 0.02);
+  --color-bg-card-hover: rgba(0, 0, 0, 0.04);
+  --color-bg-modal: #ffffff;
+  --color-bg-nav: rgba(255, 255, 255, 0.85);
+  --color-bg-input: rgba(0, 0, 0, 0.03);
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  --color-bg-tag: rgba(0, 0, 0, 0.04);
+
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-strong: rgba(0, 0, 0, 0.12);
+
+  --color-text-primary: #18181b;
+  --color-text-heading: #09090b;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #71717a;
+  --color-text-faint: #a1a1aa;
+
+  --color-glow: rgba(16, 185, 129, 0.08);
+
+  /* Grid pattern */
+  --grid-dot-color: rgba(0, 0, 0, 0.06);
+
+  /* Code syntax (light) */
+  --code-bg: rgba(0, 0, 0, 0.03);
+  --code-bar: rgba(0, 0, 0, 0.04);
+  --code-keyword: #7c3aed;
+  --code-func: #0891b2;
+  --code-comment: #a1a1aa;
+  --code-string: #059669;
+  --code-number: #d97706;
+  --code-text: #3f3f46;
+  --code-punct: #71717a;
+  --code-status-border: rgba(0, 0, 0, 0.06);
+}
+
+:root.dark {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #0d0d0d;
+  --color-bg-card: rgba(255, 255, 255, 0.02);
+  --color-bg-card-hover: rgba(255, 255, 255, 0.04);
+  --color-bg-modal: #111111;
+  --color-bg-nav: rgba(10, 10, 10, 0.8);
+  --color-bg-input: rgba(255, 255, 255, 0.04);
+  --color-bg-overlay: rgba(0, 0, 0, 0.8);
+  --color-bg-tag: rgba(255, 255, 255, 0.05);
+
+  --color-border: rgba(255, 255, 255, 0.05);
+  --color-border-strong: rgba(255, 255, 255, 0.1);
+
+  --color-text-primary: #f4f4f5;
+  --color-text-heading: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-text-faint: #52525b;
+
+  --color-glow: rgba(16, 185, 129, 0.15);
+
+  --grid-dot-color: rgba(255, 255, 255, 0.05);
+
+  /* Code syntax (dark) */
+  --code-bg: rgba(255, 255, 255, 0.05);
+  --code-bar: rgba(255, 255, 255, 0.1);
+  --code-keyword: #a78bfa;
+  --code-func: #67e8f9;
+  --code-comment: #71717a;
+  --code-string: #34d399;
+  --code-number: #fbbf24;
+  --code-text: #d4d4d8;
+  --code-punct: #a1a1aa;
+  --code-status-border: rgba(255, 255, 255, 0.05);
+}
+
 @layer base {
   body {
-    @apply bg-[#0a0a0a] text-zinc-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    @apply bg-emerald-500/30 text-emerald-200;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    background: var(--color-bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border-strong);
   }
-  
+
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-cyan-500;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transform: translateZ(0);
   }
 
   .grid-pattern {
-    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, var(--grid-dot-color) 1px, transparent 0);
     background-size: 24px 24px;
   }
+}
+
+.dark .text-gradient {
+  @apply from-emerald-400 to-cyan-400;
 }
