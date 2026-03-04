@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Code2, Globe, Cpu, ArrowRight, Github, Linkedin, Mail, Terminal, Layers, Zap, Menu, X, Send, User, AtSign, MessageSquare, Quote, Calendar, Clock, Sun, Moon } from "lucide-react";
+import { Code2, Globe, Cpu, ArrowRight, Github, Linkedin, Mail, Terminal, Layers, Zap, Menu, X, Send, User, AtSign, MessageSquare, Quote, Calendar, Clock, Sun, Moon, Mic, Sparkles } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { BlogList, BlogPost, blogPosts } from "./Blog";
 import { Impressum } from "./Impressum";
@@ -199,12 +199,25 @@ const Hero = () => {
           transition={{ duration: 0.5 }}
           className="max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            Offen für neue Projekte
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Offen für neue Projekte
+            </div>
+
+            <a
+              href="#contact"
+              className="group relative inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-emerald-500/10 border border-cyan-500/20 text-cyan-400 hover:text-cyan-300 text-xs font-mono hover:border-cyan-400/50 transition-all overflow-hidden"
+              style={{ backgroundSize: '200% auto', animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+              <Sparkles className="w-3 h-3 text-cyan-400" />
+              Brandneu: Voice Agent einrichten
+              <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all -ml-2 group-hover:ml-0" />
+            </a>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[0.95]">
             Mehr Kunden, weniger Aufwand – durch <span className="text-gradient">Websites & Workflows</span>, die für dich arbeiten.
