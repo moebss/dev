@@ -42,7 +42,7 @@ export const WebsitesPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                         <img
                             src="/peggys-website.png"
                             alt="Peggy's Website Preview"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[6s] ease-in-out"
                         />
                     </div>
                     <div className="p-8 flex flex-col flex-1">
