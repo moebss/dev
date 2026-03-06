@@ -57,7 +57,7 @@ export const WebsitesPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                         </p>
                         <div className="flex gap-4 mt-auto">
                             <a
-                                href="https://github.com/moebss/peggyswebsite"
+                                href="https://github.com/moebss/Wachstumswerk"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex flex-1 items-center justify-center gap-2 px-6 py-3 border rounded-xl font-bold hover:bg-emerald-500/5 transition-all w-max"
