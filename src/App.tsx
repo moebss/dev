@@ -475,7 +475,11 @@ const WorkflowsPreview = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { title: "Peggy's Website", desc: "Moderne Web-Applikation." },
+            {
+              title: "Peggy's Website",
+              desc: "Moderne Web-Applikation.",
+              img: `${import.meta.env.BASE_URL}peggys-website.png`
+            },
             { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
             { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
           ].map((project, idx) => (
@@ -486,14 +490,20 @@ const WorkflowsPreview = () => {
               viewport={{ once: true }}
               whileHover={{ y: -5 }}
               onClick={() => window.location.hash = "#/websites"}
-              className="group cursor-pointer p-6 rounded-2xl border hover:border-emerald-500/50 transition-all" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
+              className="group cursor-pointer p-6 rounded-2xl border hover:border-emerald-500/50 transition-all flex flex-col" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
             >
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 transition-transform">
-                <Globe className="w-6 h-6" />
-              </div>
+              {project.img ? (
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-emerald-500/5 mb-5 border group-hover:border-emerald-500/50 transition-colors" style={{ borderColor: 'var(--color-border)' }}>
+                  <img src={project.img} alt={project.title} className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[6s] ease-in-out" />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 transition-transform">
+                  <Globe className="w-6 h-6" />
+                </div>
+              )}
               <p className="text-xs font-mono text-emerald-500 mb-2">Web Development</p>
               <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-2">{project.title}</h4>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{project.desc}</p>
+              <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--color-text-secondary)' }}>{project.desc}</p>
             </motion.div>
           ))}
         </div>

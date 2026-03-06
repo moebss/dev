@@ -40,7 +40,7 @@ export const WebsitesPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                 >
                     <div className="aspect-video overflow-hidden bg-emerald-500/5">
                         <img
-                            src="/peggys-website.png"
+                            src={`${import.meta.env.BASE_URL}peggys-website.png`}
                             alt="Peggy's Website Preview"
                             className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[6s] ease-in-out"
                         />
