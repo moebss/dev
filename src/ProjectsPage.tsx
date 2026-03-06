@@ -173,7 +173,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                 {/* Back button */}
                 <button
                     onClick={() => onNavigate("#/")}
-                    className="text-zinc-500 hover:text-emerald-400 flex items-center gap-2 mb-8 text-sm font-mono transition-colors"
+                    className="hover:text-emerald-500 flex items-center gap-2 mb-8 text-sm font-mono transition-colors" style={{ color: 'var(--color-text-muted)' }}
                 >
                     <ArrowLeft className="w-4 h-4" /> Zurück zur Startseite
                 </button>
@@ -185,12 +185,12 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                     transition={{ duration: 0.5 }}
                     className="mb-16 relative"
                 >
-                    <div className="absolute -top-20 -left-20 w-72 h-72 bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+                    <div className="absolute -top-20 -left-20 w-72 h-72 blur-[120px] rounded-full pointer-events-none" style={{ backgroundColor: 'var(--color-glow)' }} />
                     <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Workflows</h2>
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight" style={{ color: 'var(--color-text-heading)' }}>
                         Automation, die <span className="text-gradient">sich selbst verkauft</span>.
                     </h1>
-                    <p className="text-xl text-zinc-400 max-w-2xl">
+                    <p className="text-xl max-w-2xl" style={{ color: 'var(--color-text-secondary)' }}>
                         18 praxiserprobte n8n-Workflows – bereit zum Einsatz. Von Lead-Qualifizierung über KI-gestützte Kundenbetreuung bis hin zu automatisiertem Mahnwesen.
                     </p>
                 </motion.div>
@@ -208,12 +208,13 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                             onClick={() => setActiveFilter(cat)}
                             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeFilter === cat
                                 ? "bg-emerald-500 text-black"
-                                : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white border border-white/5"
+                                : "border"
                                 }`}
+                            style={activeFilter !== cat ? { backgroundColor: 'var(--color-bg-tag)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' } : undefined}
                         >
                             {cat}
                             {activeFilter !== cat && (
-                                <span className="ml-2 text-zinc-600 text-xs">
+                                <span className="ml-2 text-xs" style={{ color: 'var(--color-text-faint)' }}>
                                     {cat === "Alle" ? workflows.length : workflows.filter(w => w.categories.includes(cat)).length}
                                 </span>
                             )}
@@ -232,7 +233,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.4, delay: idx * 0.05 }}
                                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                                className="group relative p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/50 transition-all overflow-hidden cursor-pointer"
+                                className="group relative p-6 rounded-2xl border hover:border-emerald-500/50 transition-all overflow-hidden cursor-pointer" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
                             >
                                 {/* Quick-Win overlay on hover */}
                                 <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -243,7 +244,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                                 </div>
 
                                 {/* Workflow number */}
-                                <span className="absolute top-4 left-6 text-[10px] font-mono text-zinc-700">
+                                <span className="absolute top-4 left-6 text-[10px] font-mono" style={{ color: 'var(--color-text-faint)' }}>
                                     #{String(workflow.id).padStart(2, "0")}
                                 </span>
 
@@ -254,7 +255,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
 
                                 {/* Content */}
                                 <h3 className="text-lg font-bold mb-2 group-hover:text-emerald-400 transition-colors">{workflow.name}</h3>
-                                <p className="text-zinc-400 text-sm leading-relaxed mb-4">{workflow.description}</p>
+                                <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--color-text-secondary)' }}>{workflow.description}</p>
 
                                 {/* Categories */}
                                 <div className="flex flex-wrap gap-1.5 mb-3">
@@ -268,7 +269,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                                 {/* Tags */}
                                 <div className="flex flex-wrap gap-1.5">
                                     {workflow.tags.map(tag => (
-                                        <span key={tag} className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 text-zinc-500 uppercase">
+                                        <span key={tag} className="text-[9px] font-mono px-2 py-0.5 rounded uppercase" style={{ backgroundColor: 'var(--color-bg-tag)', color: 'var(--color-text-muted)' }}>
                                             {tag}
                                         </span>
                                     ))}
@@ -283,19 +284,19 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="mt-16 p-8 rounded-2xl bg-white/[0.02] border border-white/5 grid grid-cols-2 md:grid-cols-3 gap-8"
+                    className="mt-16 p-8 rounded-2xl border grid grid-cols-2 md:grid-cols-3 gap-8" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
                 >
                     <div className="text-center">
                         <span className="text-3xl font-bold text-emerald-500">18</span>
-                        <p className="text-xs font-mono text-zinc-500 mt-1 uppercase tracking-wider">Workflows</p>
+                        <p className="text-xs font-mono mt-1 uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Workflows</p>
                     </div>
                     <div className="text-center">
                         <span className="text-3xl font-bold text-emerald-500">6</span>
-                        <p className="text-xs font-mono text-zinc-500 mt-1 uppercase tracking-wider">Kategorien</p>
+                        <p className="text-xs font-mono mt-1 uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Kategorien</p>
                     </div>
                     <div className="text-center">
                         <span className="text-3xl font-bold text-emerald-500">24h</span>
-                        <p className="text-xs font-mono text-zinc-500 mt-1 uppercase tracking-wider">Setup-Zeit</p>
+                        <p className="text-xs font-mono mt-1 uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Setup-Zeit</p>
                     </div>
                 </motion.div>
 
@@ -306,7 +307,7 @@ export const ProjectsPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                     transition={{ delay: 0.6 }}
                     className="mt-12 text-center"
                 >
-                    <p className="text-zinc-400 mb-4">Interesse an einem dieser Workflows?</p>
+                    <p className="mb-4" style={{ color: 'var(--color-text-secondary)' }}>Interesse an einem dieser Workflows?</p>
                     <a
                         href="mailto:hello@rheindorf.digital"
                         className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"

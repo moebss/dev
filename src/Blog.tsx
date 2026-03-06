@@ -517,19 +517,19 @@ const renderContent = (content: string) => {
         if (!trimmed) {
             elements.push(<div key={i} className="h-4" />);
         } else if (trimmed.startsWith("## ")) {
-            elements.push(<h2 key={i} className="text-3xl font-bold mt-8 mb-4">{trimmed.slice(3)}</h2>);
+            elements.push(<h2 key={i} className="text-3xl font-bold mt-8 mb-4" style={{ color: 'var(--color-text-heading)' }}>{trimmed.slice(3)}</h2>);
         } else if (trimmed.startsWith("### ")) {
             elements.push(<h3 key={i} className="text-xl font-bold mt-6 mb-3 text-emerald-400">{trimmed.slice(4)}</h3>);
         } else if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
-            elements.push(<p key={i} className="text-zinc-200 font-bold mb-2">{trimmed.slice(2, -2)}</p>);
+            elements.push(<p key={i} className="font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>{trimmed.slice(2, -2)}</p>);
         } else if (trimmed.startsWith("- ")) {
             const text = trimmed.slice(2);
             const parts = text.split("**");
             elements.push(
                 <div key={i} className="flex gap-3 mb-2 ml-4">
                     <span className="text-emerald-500 mt-1">•</span>
-                    <span className="text-zinc-400">
-                        {parts.map((part, j) => j % 2 === 1 ? <strong key={j} className="text-zinc-200">{part}</strong> : part)}
+                    <span style={{ color: 'var(--color-text-secondary)' }}>
+                        {parts.map((part, j) => j % 2 === 1 ? <strong key={j} style={{ color: 'var(--color-text-primary)' }}>{part}</strong> : part)}
                     </span>
                 </div>
             );
@@ -545,7 +545,7 @@ const renderContent = (content: string) => {
 const text_bold_split = (text: string) => {
     const parts = text.split("**");
     if (parts.length === 1) return text;
-    return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-zinc-200">{part}</strong> : part);
+    return parts.map((part, i) => i % 2 === 1 ? <strong key={i} style={{ color: 'var(--color-text-primary)' }}>{part}</strong> : part);
 };
 
 // Blog list view with tag filtering
@@ -561,13 +561,13 @@ export const BlogList = ({ onNavigate }: { onNavigate: (hash: string) => void })
             <div className="max-w-4xl mx-auto px-6">
                 <div className="mb-12">
                     <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Blog</h2>
-                    <h3 className="text-4xl font-bold mb-4">Gedanken, Tipps & Insights</h3>
-                    <p className="text-zinc-400">Praxisnahe Artikel rund um Workflows, KI und Digitalisierung im Mittelstand.</p>
+                    <h3 className="text-4xl font-bold mb-4" style={{ color: 'var(--color-text-heading)' }}>Gedanken, Tipps & Insights</h3>
+                    <p style={{ color: 'var(--color-text-secondary)' }}>Praxisnahe Artikel rund um Workflows, KI und Digitalisierung im Mittelstand.</p>
                 </div>
 
                 {/* Tag Filter */}
                 <div className="mb-10">
-                    <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono uppercase mb-3">
+                    <div className="flex items-center gap-2 text-xs font-mono uppercase mb-3" style={{ color: 'var(--color-text-muted)' }}>
                         <Filter className="w-3 h-3" /> Filtern nach Thema
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -575,8 +575,9 @@ export const BlogList = ({ onNavigate }: { onNavigate: (hash: string) => void })
                             onClick={() => setActiveTag("Alle")}
                             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeTag === "Alle"
                                 ? "bg-emerald-500 text-black"
-                                : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white border border-white/5"
+                                : "border"
                                 }`}
+                            style={activeTag !== "Alle" ? { backgroundColor: 'var(--color-bg-tag)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' } : undefined}
                         >
                             Alle ({blogPosts.length})
                         </button>
@@ -586,8 +587,9 @@ export const BlogList = ({ onNavigate }: { onNavigate: (hash: string) => void })
                                 onClick={() => setActiveTag(tag)}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${activeTag === tag
                                     ? "bg-emerald-500 text-black"
-                                    : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white border border-white/5"
+                                    : "border"
                                     }`}
+                                style={activeTag !== tag ? { backgroundColor: 'var(--color-bg-tag)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' } : undefined}
                             >
                                 {tag}
                             </button>
@@ -604,18 +606,18 @@ export const BlogList = ({ onNavigate }: { onNavigate: (hash: string) => void })
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: idx * 0.05 }}
                             onClick={() => onNavigate(`#/blog/${post.slug}`)}
-                            className="p-8 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/50 transition-all cursor-pointer group"
+                            className="p-8 rounded-2xl border hover:border-emerald-500/50 transition-all cursor-pointer group" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
                         >
-                            <div className="flex items-center gap-4 text-xs font-mono text-zinc-500 mb-4">
+                            <div className="flex items-center gap-4 text-xs font-mono mb-4" style={{ color: 'var(--color-text-muted)' }}>
                                 <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {post.date}</span>
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
                             </div>
-                            <h4 className="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition-colors">{post.title}</h4>
-                            <p className="text-zinc-400 mb-5 leading-relaxed">{post.excerpt}</p>
+                            <h4 className="text-2xl font-bold mb-3 group-hover:text-emerald-400 transition-colors" style={{ color: 'var(--color-text-heading)' }}>{post.title}</h4>
+                            <p className="mb-5 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{post.excerpt}</p>
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-wrap gap-2">
                                     {post.tags.map(tag => (
-                                        <span key={tag} className="text-[10px] font-mono px-2 py-1 rounded bg-white/5 text-zinc-500 uppercase flex items-center gap-1">
+                                        <span key={tag} className="text-[10px] font-mono px-2 py-1 rounded uppercase flex items-center gap-1" style={{ backgroundColor: 'var(--color-bg-tag)', color: 'var(--color-text-muted)' }}>
                                             <Tag className="w-2.5 h-2.5" /> {tag}
                                         </span>
                                     ))}
@@ -631,7 +633,7 @@ export const BlogList = ({ onNavigate }: { onNavigate: (hash: string) => void })
                 {/* Empty state */}
                 {filteredPosts.length === 0 && (
                     <div className="text-center py-16">
-                        <p className="text-zinc-500 font-mono text-sm">Keine Artikel für diesen Filter gefunden.</p>
+                        <p className="font-mono text-sm" style={{ color: 'var(--color-text-muted)' }}>Keine Artikel für diesen Filter gefunden.</p>
                         <button onClick={() => setActiveTag("Alle")} className="text-emerald-500 hover:text-emerald-400 text-sm mt-2">
                             Alle anzeigen
                         </button>
@@ -650,7 +652,7 @@ export const BlogPost = ({ slug, onNavigate }: { slug: string; onNavigate: (hash
         return (
             <section className="pt-32 pb-24 min-h-screen">
                 <div className="max-w-4xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl font-bold mb-4">Artikel nicht gefunden</h2>
+                    <h2 className="text-4xl font-bold mb-4" style={{ color: 'var(--color-text-heading)' }}>Artikel nicht gefunden</h2>
                     <button onClick={() => onNavigate("#/blog")} className="text-emerald-500 hover:text-emerald-400 flex items-center gap-2 mx-auto">
                         <ArrowLeft className="w-4 h-4" /> Zurück zum Blog
                     </button>
@@ -665,12 +667,12 @@ export const BlogPost = ({ slug, onNavigate }: { slug: string; onNavigate: (hash
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                     <button
                         onClick={() => onNavigate("#/blog")}
-                        className="text-zinc-500 hover:text-emerald-400 flex items-center gap-2 mb-8 text-sm font-mono transition-colors"
+                        className="hover:text-emerald-500 flex items-center gap-2 mb-8 text-sm font-mono transition-colors" style={{ color: 'var(--color-text-muted)' }}
                     >
                         <ArrowLeft className="w-4 h-4" /> Zurück zum Blog
                     </button>
 
-                    <div className="flex items-center gap-4 text-xs font-mono text-zinc-500 mb-6">
+                    <div className="flex items-center gap-4 text-xs font-mono mb-6" style={{ color: 'var(--color-text-muted)' }}>
                         <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {post.date}</span>
                         <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
                     </div>
@@ -687,7 +689,7 @@ export const BlogPost = ({ slug, onNavigate }: { slug: string; onNavigate: (hash
                         {renderContent(post.content)}
                     </article>
 
-                    <div className="mt-16 pt-8 border-t border-white/5">
+                    <div className="mt-16 pt-8 border-t" style={{ borderColor: 'var(--color-border)' }}>
                         <button
                             onClick={() => onNavigate("#/blog")}
                             className="text-emerald-500 hover:text-emerald-400 flex items-center gap-2 text-sm font-medium transition-colors"
