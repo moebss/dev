@@ -475,7 +475,7 @@ const WorkflowsPreview = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
+            { title: "Peggy's Website", desc: "Moderne Web-Applikation." },
             { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
             { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
           ].map((project, idx) => (
