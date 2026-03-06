@@ -476,7 +476,7 @@ const WorkflowsPreview = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
-              title: "Peggy's Website",
+              title: "Wachstumswerk",
               desc: "Moderne Web-Applikation.",
               img: `${import.meta.env.BASE_URL}peggys-website.png`
             },

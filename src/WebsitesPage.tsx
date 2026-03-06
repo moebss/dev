@@ -41,13 +41,13 @@ export const WebsitesPage = ({ onNavigate }: { onNavigate: (hash: string) => voi
                     <div className="aspect-video overflow-hidden bg-emerald-500/5">
                         <img
                             src={`${import.meta.env.BASE_URL}peggys-website.png`}
-                            alt="Peggy's Website Preview"
+                            alt="Wachstumswerk Preview"
                             className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[6s] ease-in-out"
                         />
                     </div>
                     <div className="p-8 flex flex-col flex-1">
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Peggy's Website</h3>
+                            <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Wachstumswerk</h3>
                             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/10 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-colors">
                                 <Globe className="w-5 h-5" />
                             </div>
