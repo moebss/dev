@@ -481,7 +481,7 @@ const WorkflowsPreview = () => {
               img: `${import.meta.env.BASE_URL}peggys-website.png`
             },
             {
-              title: "Pulheim Bürgerbrief",
+              title: "Rhein-Erft-Kreis Bürgerbrief",
               desc: "Infoportal & Newsletter.",
               img: `${import.meta.env.BASE_URL}buergerbrief.png`
             },
