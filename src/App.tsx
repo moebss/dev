@@ -480,7 +480,11 @@ const WorkflowsPreview = () => {
               desc: "Moderne Web-Applikation.",
               img: `${import.meta.env.BASE_URL}peggys-website.png`
             },
-            { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
+            {
+              title: "Pulheim Bürgerbrief",
+              desc: "Infoportal & Newsletter.",
+              img: `${import.meta.env.BASE_URL}buergerbrief.png`
+            },
             { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
           ].map((project, idx) => (
             <motion.div
