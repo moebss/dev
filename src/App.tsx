@@ -536,7 +536,7 @@ const Contact = () => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "083296ac-5a02-4217-bc22-b5e14d18fa79", // Public access key (free tier)
+          access_key: "d5994763-d725-47ad-b8b6-d5b33baf274c", // Public access key
           from_name: formData.name,
           email: formData.email,
           message: formData.message,
