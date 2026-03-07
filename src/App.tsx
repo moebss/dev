@@ -768,7 +768,7 @@ const Footer = ({ onShowImpressum, onShowDatenschutz }: { onShowImpressum: () =>
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
 
         {/* Brand & Description */}
         <div className="col-span-1 md:col-span-2 lg:col-span-1">
@@ -808,26 +808,6 @@ const Footer = ({ onShowImpressum, onShowDatenschutz }: { onShowImpressum: () =>
             <li><a href="#/blog" className="hover:text-emerald-500 transition-colors">Insights (Blog)</a></li>
             <li><a href="#contact" className="hover:text-emerald-500 transition-colors">Kontakt</a></li>
           </ul>
-        </div>
-
-        {/* Newsletter Opt-In */}
-        <div>
-          <h4 className="font-bold mb-6" style={{ color: 'var(--color-text-heading)' }}>Digitales Update</h4>
-          <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
-            1x im Monat praxisnahe Insights zu Webdesign und KI im Mittelstand. Kein Spam.
-          </p>
-          <form className="relative" onSubmit={(e) => { e.preventDefault(); alert("Newsletter-Anmeldung erfolgreich! (Demnächst verfügbar)"); }}>
-            <input
-              type="email"
-              placeholder="deine@email.de"
-              className="w-full pl-4 pr-12 py-3 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/25 transition-all text-sm"
-              style={{ backgroundColor: 'var(--color-bg-input)', border: '1px solid var(--color-border-strong)', color: 'var(--color-text-primary)' }}
-              required
-            />
-            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-emerald-500 text-black rounded-lg flex items-center justify-center hover:bg-emerald-400 transition-all">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
         </div>
 
       </div>
