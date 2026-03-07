@@ -1,369 +1,281 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import React from 'react';
+
+// ─── TOOL LOGOS as SVG paths ──────────────────────────────────────────────────
+const LOGOS = {
+    telegram: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#0088cc" />
+            <path d="M5.5 11.5l11-4.5-1.5 9-3.5-2.5-2 2v-3l5-4.5-6.5 3.5-2.5-1z" fill="white" />
+        </svg>
+    ),
+    openai: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#10a37f" />
+            <path d="M12 6.5a2.5 2.5 0 0 1 2.5 2.5v1h1a1.5 1.5 0 0 1 0 3h-1v1a2.5 2.5 0 0 1-5 0v-1h-1a1.5 1.5 0 0 1 0-3h1V9A2.5 2.5 0 0 1 12 6.5z" fill="white" opacity="0.9" />
+        </svg>
+    ),
+    google: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#fff" />
+            <path d="M12 11v2.4h3.3c-.1.8-.9 2.4-3.3 2.4-2 0-3.6-1.6-3.6-3.6s1.6-3.6 3.6-3.6c1.1 0 1.9.5 2.3.9l1.6-1.5C14.8 8.4 13.5 7.8 12 7.8c-3 0-5.4 2.4-5.4 5.4s2.4 5.4 5.4 5.4c3.1 0 5.2-2.2 5.2-5.3 0-.4 0-.6-.1-.9H12z" fill="#4285f4" />
+        </svg>
+    ),
+    n8n: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#ea4b71" />
+            <text x="12" y="16" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="monospace">n8n</text>
+        </svg>
+    ),
+    whisper: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#7C6AF7" />
+            <rect x="10" y="7" width="4" height="7" rx="2" fill="white" />
+            <path d="M7 13a5 5 0 0 0 10 0" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+            <line x1="12" y1="18" x2="12" y2="20" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    ),
+    cron: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#F59E0B" />
+            <circle cx="12" cy="12" r="5" stroke="white" strokeWidth="1.5" fill="none" />
+            <path d="M12 9v3l2 2" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+    ),
+    merge: ({ size = 20 }: { size?: number }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#7C6AF7" />
+            <path d="M7 8l5 4-5 4M17 12H12" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    ),
+};
 
 // ─── FLOW DATA ────────────────────────────────────────────────────────────────
-
 const FLOWS = {
     input: {
-        id: "input",
-        label: "Nachricht verarbeiten",
-        emoji: "📨",
-        accentColor: "#10b981", // Emerald-500 matching the site
-        description: "Sprache oder Text → Kalender-Eintrag in 3 Sekunden",
+        id: "input", label: "Nachricht", emoji: "📨", accent: "#0088cc",
+        tagline: "Sprache oder Text → Kalender-Eintrag in ~3 Sekunden",
         nodes: [
             {
-                id: "tg_trigger", x: 30, y: 185,
-                icon: "✈️", brand: "#0088cc", category: "TRIGGER",
-                label: "Telegram Bot", sublabel: "Eingehende Nachricht",
-                detail: {
-                    title: "Telegram Trigger",
-                    desc: "Du schickst dem Bot eine Nachricht — Sprachnachricht oder Text. n8n empfängt sie in Echtzeit via Webhook und startet den Workflow sofort.",
-                    tools: ["Telegram Bot API", "n8n Webhook"],
-                    output: '{ type: "voice" | "text", content: "..." }',
-                },
+                id: "tg1", x: 40, y: 200, w: 150, h: 58, logo: "telegram", brand: "#0088cc", cat: "TRIGGER",
+                label: "Telegram Bot", sub: "Nachricht empfangen",
+                log: "📨 Neue Nachricht empfangen",
+                detail: { title: "Telegram Trigger", desc: "Du schickst dem Bot eine Sprach- oder Textnachricht. n8n empfängt sie via Webhook und startet sofort.", out: '{ type:"voice"|"text", chat_id, content }', tools: ["Telegram Bot API", "n8n Webhook"] }
             },
             {
-                id: "if_node", x: 240, y: 185,
-                icon: "⚡", brand: "#F59E0B", category: "ROUTER",
-                label: "Typ erkennen", sublabel: "Audio oder Text?",
-                detail: {
-                    title: "If-Node: Nachrichtentyp",
-                    desc: "Prüft ob es eine Sprachnachricht (voice/audio) oder Text ist. Zwei Pfade — beide landen am Ende beim selben GPT-Knoten.",
-                    tools: ["n8n If-Node"],
-                    output: "→ Audio-Pfad  /  → Text-Pfad",
-                },
+                id: "if1", x: 230, y: 200, w: 150, h: 58, logo: "n8n", brand: "#F59E0B", cat: "ROUTER",
+                label: "Typ erkennen", sub: "Audio oder Text?",
+                log: "⚡ Nachrichtentyp erkannt: voice",
+                detail: { title: "If-Node: Routing", desc: "Prüft ob die Nachricht eine Sprachnachricht (OGG) oder Text ist. Zwei Pfade — beide enden beim GPT-Knoten.", out: "→ Audio  /  → Text", tools: ["n8n If-Node"] }
             },
             {
-                id: "get_file", x: 450, y: 80,
-                icon: "📁", brand: "#0088cc", category: "AKTION",
-                label: "Audio laden", sublabel: "Telegram get file",
-                detail: {
-                    title: "Get File",
-                    desc: "Das OGG-Audio der Sprachnachricht wird über die Telegram File API heruntergeladen und als Binary für Whisper vorbereitet.",
-                    tools: ["Telegram File API"],
-                    output: "audio/ogg → base64 binary",
-                },
+                id: "gf1", x: 420, y: 80, w: 150, h: 58, logo: "telegram", brand: "#0088cc", cat: "AKTION",
+                label: "Audio laden", sub: "get file",
+                log: "📁 OGG-Datei heruntergeladen (142 KB)",
+                detail: { title: "Telegram: Get File", desc: "Das OGG-Audio der Sprachnachricht wird von Telegram-Servern heruntergeladen und als Binary für Whisper aufbereitet.", out: "audio/ogg binary (base64)", tools: ["Telegram File API"] }
             },
             {
-                id: "transcribe", x: 660, y: 80,
-                icon: "🎙️", brand: "#7C6AF7", category: "KI",
-                label: "Transkription", sublabel: "OpenAI Whisper",
-                detail: {
-                    title: "Whisper: Sprache → Text",
-                    desc: "OpenAI Whisper transkribiert die Sprachnachricht auf Deutsch. Funktioniert zuverlässig auch bei schnellem Sprechen, Dialekt oder Hintergrundgeräuschen.",
-                    tools: ["OpenAI Whisper API"],
-                    output: '"Morgen um 14 Uhr Zahnarzt"',
-                },
+                id: "ws1", x: 610, y: 80, w: 150, h: 58, logo: "whisper", brand: "#7C6AF7", cat: "KI",
+                label: "Transkription", sub: "OpenAI Whisper",
+                log: '🎙️ Transkript: "Morgen 14 Uhr Zahnarzt"',
+                detail: { title: "Whisper: Sprache → Text", desc: "OpenAI Whisper transkribiert auf Deutsch. Funktioniert präzise auch bei Dialekt, schnellem Sprechen oder Geräuschen.", out: '"Morgen um 14 Uhr Zahnarzt"', tools: ["OpenAI Whisper API"] }
             },
             {
-                id: "parse_ai", x: 450, y: 300,
-                icon: "🤖", brand: "#7C6AF7", category: "KI",
-                label: "Termin extrahieren", sublabel: "GPT-4o",
-                detail: {
-                    title: "GPT-4o: Termin parsen",
-                    desc: 'Versteht natürliche Sprache: "Übermorgen um drei Kaffee mit Lisa im Café Central" → Datum, Uhrzeit, Titel, Ort werden strukturiert extrahiert.',
-                    tools: ["OpenAI GPT-4o"],
-                    output: '{ title, date, time, location }',
-                },
+                id: "gp1", x: 420, y: 330, w: 150, h: 58, logo: "openai", brand: "#7C6AF7", cat: "KI",
+                label: "Termin extrahieren", sub: "GPT-4o",
+                log: '🤖 Extrahiert: Di 11.03. · 14:00 · Zahnarzt',
+                detail: { title: "GPT-4o: Parsen", desc: 'Versteht natürliche Sprache: "Übermorgen um drei Kaffee mit Lisa im Café Central" → strukturiertes JSON.', out: '{ title, date:"2025-03-11", time:"14:00", loc }', tools: ["OpenAI GPT-4o"] }
             },
             {
-                id: "cal_create", x: 660, y: 300,
-                icon: "📅", brand: "#00C896", category: "AKTION",
-                label: "Termin anlegen", sublabel: "Google Calendar",
-                detail: {
-                    title: "Google Calendar: Event erstellen",
-                    desc: "Der strukturierte Termin wird automatisch im richtigen Kalender angelegt — mit Titel, Datum, Uhrzeit und Ort. Kein manuelles Tippen nötig.",
-                    tools: ["Google Calendar API"],
-                    output: "Event ID + Kalender-URL",
-                },
+                id: "cc1", x: 610, y: 330, w: 150, h: 58, logo: "google", brand: "#00C896", cat: "AKTION",
+                label: "Termin anlegen", sub: "Google Calendar",
+                log: "📅 Event erstellt: event_id abc123",
+                detail: { title: "Google Calendar: Create", desc: "Termin wird automatisch im richtigen Kalender angelegt — Titel, Datum, Uhrzeit, Ort. Keine manuelle Eingabe.", out: "event_id + htmlLink", tools: ["Google Calendar API"] }
             },
             {
-                id: "confirm", x: 870, y: 185,
-                icon: "✅", brand: "#00C896", category: "AKTION",
-                label: "Bestätigung", sublabel: "Telegram reply",
-                detail: {
-                    title: "Bestätigung senden",
-                    desc: 'Sofortige Antwort im Telegram-Chat: "✅ Kaffee mit Lisa — Mo 10.03. · 15:00 Uhr · Café Central"',
-                    tools: ["Telegram Bot API"],
-                    output: "Message gesendet ✓",
-                },
+                id: "cf1", x: 800, y: 200, w: 150, h: 58, logo: "telegram", brand: "#00C896", cat: "AKTION",
+                label: "Bestätigung", sub: "Telegram reply",
+                log: '✅ Gesendet: "Zahnarzt Di 14:00 gespeichert"',
+                detail: { title: "Bestätigung senden", desc: 'Sofortige Antwort: "✅ Zahnarzt — Di 11.03. · 14:00 Uhr". Loop geschlossen.', out: "Message sent · 200 OK", tools: ["Telegram Bot API"] }
             },
         ],
         edges: [
-            { from: "tg_trigger", to: "if_node", label: "" },
-            { from: "if_node", to: "get_file", label: "🎤 Audio" },
-            { from: "if_node", to: "parse_ai", label: "💬 Text" },
-            { from: "get_file", to: "transcribe", label: "" },
-            { from: "transcribe", to: "parse_ai", label: "" },
-            { from: "parse_ai", to: "cal_create", label: "" },
-            { from: "cal_create", to: "confirm", label: "" },
+            { f: "tg1", t: "if1" }, { f: "if1", t: "gf1", label: "🎤" }, { f: "if1", t: "gp1", label: "💬" },
+            { f: "gf1", t: "ws1" }, { f: "ws1", t: "gp1" }, { f: "gp1", t: "cc1" }, { f: "cc1", t: "cf1" },
         ],
-        autoPlay: ["tg_trigger", "if_node", "get_file", "transcribe", "parse_ai", "cal_create", "confirm"],
-        stats: [
-            { label: "Latenz", value: "~3 Sek." },
-            { label: "Sprache erkannt", value: "Deutsch" },
-            { label: "Genauigkeit", value: "> 95%" },
-        ],
+        seq: ["tg1", "if1", "gf1", "ws1", "gp1", "cc1", "cf1"],
+        stats: [{ l: "Latenz", v: "~3s" }, { l: "Sprache", v: "DE" }, { l: "Acc.", v: ">95%" }, { l: "Ausführungen", v: "tägl." }],
     },
 
     daily: {
-        id: "daily",
-        label: "Tages-Briefing",
-        emoji: "🌅",
-        accentColor: "#F59E0B",
-        description: "Jeden Morgen um 7:00 Uhr — dein Tag auf einen Blick",
+        id: "daily", label: "Tages-Briefing", emoji: "🌅", accent: "#F59E0B",
+        tagline: "Jeden Morgen 7:00 Uhr — dein Tag auf einen Blick",
         nodes: [
             {
-                id: "d_cron", x: 30, y: 200,
-                icon: "⏰", brand: "#F59E0B", category: "TRIGGER",
-                label: "Jeden Morgen", sublabel: "07:00 Uhr täglich",
-                detail: {
-                    title: "Cron Trigger: 7:00 Uhr",
-                    desc: "Startet jeden Morgen pünktlich um 7:00 Uhr — vollautomatisch, ohne dass du etwas tun musst.",
-                    tools: ["n8n Schedule Trigger"],
-                    output: "timestamp: today 07:00",
-                },
+                id: "dc0", x: 30, y: 210, w: 150, h: 58, logo: "cron", brand: "#F59E0B", cat: "TRIGGER",
+                label: "Jeden Morgen", sub: "07:00 Uhr",
+                log: "⏰ Cron ausgelöst: 07:00:00",
+                detail: { title: "Schedule: 7:00 Uhr tägl.", desc: "Vollautomatisch. Kein manuelles Auslösen nötig — der Workflow startet jeden Morgen pünktlich.", out: "{ ts: 'today 07:00' }", tools: ["n8n Schedule Trigger"] }
             },
             {
-                id: "d_cal1", x: 230, y: 100,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Privat-Kalender", sublabel: "Heute abrufen",
-                detail: {
-                    title: "Google Calendar: Privat",
-                    desc: "Alle privaten Termine des heutigen Tages werden abgerufen — parallel zu den anderen Kalendern für maximale Geschwindigkeit.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] für heute",
-                },
+                id: "dc1", x: 240, y: 80, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Privat-Kalender", sub: "Heute abrufen",
+                log: "📆 3 Termine aus Privat-Kalender",
+                detail: { title: "GCal: Privat", desc: "Private Termine des heutigen Tages werden parallel abgerufen.", out: "events[3]", tools: ["Google Calendar API"] }
             },
             {
-                id: "d_cal2", x: 230, y: 210,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Arbeits-Kalender", sublabel: "Heute abrufen",
-                detail: {
-                    title: "Google Calendar: Arbeit",
-                    desc: "Geschäftliche Termine, Meetings und Calls werden gleichzeitig abgerufen.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] für heute",
-                },
+                id: "dc2", x: 240, y: 210, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Arbeits-Kalender", sub: "Heute abrufen",
+                log: "📆 2 Termine aus Arbeits-Kalender",
+                detail: { title: "GCal: Arbeit", desc: "Meetings und geschäftliche Termine werden gleichzeitig abgerufen.", out: "events[2]", tools: ["Google Calendar API"] }
             },
             {
-                id: "d_cal3", x: 230, y: 320,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Shared Kalender", sublabel: "Heute abrufen",
-                detail: {
-                    title: "Google Calendar: Shared",
-                    desc: "Geteilter Kalender mit dem Team oder Familie — auch diese Termine fließen ins Briefing ein.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] für heute",
-                },
+                id: "dc3", x: 240, y: 340, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Shared Kalender", sub: "Heute abrufen",
+                log: "📆 1 Termin aus Shared-Kalender",
+                detail: { title: "GCal: Shared", desc: "Geteilter Kalender mit Team oder Familie fließt ebenfalls ein.", out: "events[1]", tools: ["Google Calendar API"] }
             },
             {
-                id: "d_merge", x: 450, y: 210,
-                icon: "🔀", brand: "#7C6AF7", category: "LOGIK",
-                label: "Zusammenführen", sublabel: "Merge + sortieren",
-                detail: {
-                    title: "Merge & Sortierung",
-                    desc: "Alle drei Kalender-Responses werden gemergt, nach Uhrzeit sortiert und Duplikate entfernt.",
-                    tools: ["n8n Merge Node"],
-                    output: "events[] sortiert nach Zeit",
-                },
+                id: "dm0", x: 460, y: 210, w: 150, h: 58, logo: "merge", brand: "#7C6AF7", cat: "LOGIK",
+                label: "Zusammenführen", sub: "Merge + sortieren",
+                log: "🔀 6 Termine gemergt, sortiert, dedup.",
+                detail: { title: "Merge & Sort", desc: "Alle Kalender-Responses werden gemergt, nach Uhrzeit sortiert, Duplikate entfernt.", out: "events[6] sorted", tools: ["n8n Merge Node"] }
             },
             {
-                id: "d_gpt", x: 650, y: 210,
-                icon: "✍️", brand: "#7C6AF7", category: "KI",
-                label: "Briefing verfassen", sublabel: "GPT-4o",
-                detail: {
-                    title: "GPT-4o: Briefing schreiben",
-                    desc: 'GPT formuliert eine natürliche Zusammenfassung: "Guten Morgen! Du hast heute 3 Termine: 9:00 Team-Meeting, 12:00 Mittagessen mit Jan, 15:30 Kundencall mit Firma XY."',
-                    tools: ["OpenAI GPT-4o"],
-                    output: "Formatierter Briefing-Text",
-                },
+                id: "dg0", x: 670, y: 210, w: 150, h: 58, logo: "openai", brand: "#7C6AF7", cat: "KI",
+                label: "Briefing verfassen", sub: "GPT-4o",
+                log: '✍️ Briefing generiert (312 Tokens)',
+                detail: { title: "GPT-4o: Briefing", desc: 'Formuliert natürlich: "Guten Morgen! Heute hast du 6 Termine. Los geht\'s um 9:00 mit dem Team-Meeting..."', out: "Formatierter Briefing-Text", tools: ["OpenAI GPT-4o"] }
             },
             {
-                id: "d_send", x: 860, y: 210,
-                icon: "✈️", brand: "#0088cc", category: "AKTION",
-                label: "Telegram senden", sublabel: "Tages-Briefing",
-                detail: {
-                    title: "Telegram: Briefing verschicken",
-                    desc: "Das fertige Briefing landet jeden Morgen um 7 Uhr in deinem Telegram. Kein Kalender öffnen, kein Scrollen — alles auf einen Blick.",
-                    tools: ["Telegram Bot API"],
-                    output: "Message gesendet ✓",
-                },
+                id: "ds0", x: 880, y: 210, w: 150, h: 58, logo: "telegram", brand: "#0088cc", cat: "AKTION",
+                label: "Telegram senden", sub: "Tages-Briefing",
+                log: "✈️ Briefing gesendet · 07:00:04",
+                detail: { title: "Telegram: Briefing", desc: "Fertig formatiertes Briefing landet um 7 Uhr in Telegram. Kein Kalender öffnen nötig.", out: "Message sent · 200 OK", tools: ["Telegram Bot API"] }
             },
         ],
         edges: [
-            { from: "d_cron", to: "d_cal1" },
-            { from: "d_cron", to: "d_cal2" },
-            { from: "d_cron", to: "d_cal3" },
-            { from: "d_cal1", to: "d_merge" },
-            { from: "d_cal2", to: "d_merge" },
-            { from: "d_cal3", to: "d_merge" },
-            { from: "d_merge", to: "d_gpt" },
-            { from: "d_gpt", to: "d_send" },
+            { f: "dc0", t: "dc1" }, { f: "dc0", t: "dc2" }, { f: "dc0", t: "dc3" },
+            { f: "dc1", t: "dm0" }, { f: "dc2", t: "dm0" }, { f: "dc3", t: "dm0" },
+            { f: "dm0", t: "dg0" }, { f: "dg0", t: "ds0" },
         ],
-        autoPlay: ["d_cron", "d_cal1", "d_cal2", "d_cal3", "d_merge", "d_gpt", "d_send"],
-        stats: [
-            { label: "Uhrzeit", value: "07:00 täglich" },
-            { label: "Kalender", value: "3 parallel" },
-            { label: "Laufzeit", value: "~4 Sek." },
-        ],
+        seq: ["dc0", "dc1", "dc2", "dc3", "dm0", "dg0", "ds0"],
+        stats: [{ l: "Uhrzeit", v: "07:00" }, { l: "Kalender", v: "3×" }, { l: "Parallel", v: "ja" }, { l: "Laufzeit", v: "~4s" }],
     },
 
     weekly: {
-        id: "weekly",
-        label: "Wochen-Briefing",
-        emoji: "📋",
-        accentColor: "#00C896",
-        description: "Jeden Montag 6:00 Uhr — die ganze Woche im Überblick",
+        id: "weekly", label: "Wochen-Briefing", emoji: "📋", accent: "#00C896",
+        tagline: "Jeden Montag 6:00 Uhr — die ganze Woche im Überblick",
         nodes: [
             {
-                id: "w_cron", x: 30, y: 200,
-                icon: "📅", brand: "#00C896", category: "TRIGGER",
-                label: "Jeden Montag", sublabel: "06:00 Uhr",
-                detail: {
-                    title: "Cron Trigger: Mo 6:00 Uhr",
-                    desc: "Jeden Montag um 6 Uhr startet die Wochenübersicht — bevor der Arbeitstag beginnt, bist du bereits vorbereitet.",
-                    tools: ["n8n Schedule Trigger"],
-                    output: "timestamp: monday 06:00",
-                },
+                id: "wc0", x: 30, y: 210, w: 150, h: 58, logo: "cron", brand: "#00C896", cat: "TRIGGER",
+                label: "Jeden Montag", sub: "06:00 Uhr",
+                log: "⏰ Wochenplan-Trigger ausgelöst",
+                detail: { title: "Schedule: Mo 6:00 Uhr", desc: "Jeden Montag um 6 Uhr — bevor der Tag beginnt, hast du schon den vollen Überblick.", out: "{ ts: 'monday 06:00' }", tools: ["n8n Schedule Trigger"] }
             },
             {
-                id: "w_cal1", x: 230, y: 100,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Kalender 1", sublabel: "Mo–So abrufen",
-                detail: {
-                    title: "Kalender: Mo bis So",
-                    desc: "Alle Termine der gesamten Kalenderwoche werden aus Kalender 1 abgerufen.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] diese Woche",
-                },
+                id: "wc1", x: 240, y: 80, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Kalender 1", sub: "Mo–So abrufen",
+                log: "📆 8 Termine KW10 aus Kalender 1",
+                detail: { title: "GCal: Ganze Woche", desc: "Alle Termine von Mo bis So aus Kalender 1 abgerufen.", out: "events[8] KW10", tools: ["Google Calendar API"] }
             },
             {
-                id: "w_cal2", x: 230, y: 210,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Kalender 2", sublabel: "Mo–So abrufen",
-                detail: {
-                    title: "Kalender 2: Arbeit",
-                    desc: "Zweiter Kalender — z.B. geschäftliche Termine oder ein Team-Kalender — wird parallel abgerufen.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] diese Woche",
-                },
+                id: "wc2", x: 240, y: 210, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Kalender 2", sub: "Mo–So abrufen",
+                log: "📆 5 Termine KW10 aus Kalender 2",
+                detail: { title: "GCal: Arbeit KW", desc: "Wöchentliche Arbeitstermine parallel abgerufen.", out: "events[5] KW10", tools: ["Google Calendar API"] }
             },
             {
-                id: "w_cal3", x: 230, y: 320,
-                icon: "📆", brand: "#0088cc", category: "AKTION",
-                label: "Kalender 3", sublabel: "Mo–So abrufen",
-                detail: {
-                    title: "Kalender 3: Shared",
-                    desc: "Geteilter oder dritter Kalender für die Wochenübersicht.",
-                    tools: ["Google Calendar API"],
-                    output: "events[] diese Woche",
-                },
+                id: "wc3", x: 240, y: 340, w: 150, h: 58, logo: "google", brand: "#0088cc", cat: "AKTION",
+                label: "Kalender 3", sub: "Mo–So abrufen",
+                log: "📆 2 Termine KW10 aus Kalender 3",
+                detail: { title: "GCal: Shared KW", desc: "Geteilter Kalender für Wochenübersicht.", out: "events[2] KW10", tools: ["Google Calendar API"] }
             },
             {
-                id: "w_merge", x: 450, y: 210,
-                icon: "🔀", brand: "#7C6AF7", category: "LOGIK",
-                label: "Zusammenführen", sublabel: "Nach Tag gruppieren",
-                detail: {
-                    title: "Merge + Gruppierung",
-                    desc: "Alle Termine werden zusammengeführt und nach Wochentag gruppiert. Leere Tage werden als 'Frei' markiert.",
-                    tools: ["n8n Merge Node", "Function Node"],
-                    output: "{ mo:[], di:[], mi:[], ... }",
-                },
+                id: "wm0", x: 460, y: 210, w: 150, h: 58, logo: "merge", brand: "#7C6AF7", cat: "LOGIK",
+                label: "Zusammenführen", sub: "Nach Tag gruppieren",
+                log: "🔀 15 Termine → nach Wochentag gruppiert",
+                detail: { title: "Merge + Gruppierung", desc: "Zusammengeführt, nach Wochentag gruppiert. Leere Tage → 'Frei'.", out: "{ mo:[3], di:[2], mi:[4], ... }", tools: ["n8n Merge Node", "Function Node"] }
             },
             {
-                id: "w_gpt", x: 650, y: 210,
-                icon: "✍️", brand: "#7C6AF7", category: "KI",
-                label: "Wochenplan", sublabel: "GPT-4o",
-                detail: {
-                    title: "GPT-4o: Wochenplan schreiben",
-                    desc: "GPT erstellt eine strukturierte Wochenübersicht mit Highlight der wichtigsten Termine, Puffer-Zeiten und einer kurzen Einschätzung der Woche.",
-                    tools: ["OpenAI GPT-4o"],
-                    output: "Formatierter Wochenplan",
-                },
+                id: "wg0", x: 670, y: 210, w: 150, h: 58, logo: "openai", brand: "#7C6AF7", cat: "KI",
+                label: "Wochenplan", sub: "GPT-4o",
+                log: '✍️ Wochenplan generiert (580 Tokens)',
+                detail: { title: "GPT-4o: Wochenplan", desc: "GPT erstellt strukturierten Plan mit Highlights, freien Slots und Einschätzung der Woche.", out: "Formatierter Wochenplan", tools: ["OpenAI GPT-4o"] }
             },
             {
-                id: "w_send", x: 860, y: 210,
-                icon: "✈️", brand: "#0088cc", category: "AKTION",
-                label: "Telegram senden", sublabel: "Wochenplan",
-                detail: {
-                    title: "Telegram: Wochenplan verschicken",
-                    desc: "Der komplette Wochenplan landet jeden Montag um 6 Uhr in Telegram. Du weißt was kommt — bevor der Tag überhaupt beginnt.",
-                    tools: ["Telegram Bot API"],
-                    output: "Message gesendet ✓",
-                },
+                id: "ws0", x: 880, y: 210, w: 150, h: 58, logo: "telegram", brand: "#0088cc", cat: "AKTION",
+                label: "Telegram senden", sub: "Wochenplan",
+                log: "✈️ Wochenplan gesendet · 06:00:06",
+                detail: { title: "Telegram: Wochenplan", desc: "Kompletter Plan landet Mo um 6 Uhr in Telegram — du weißt was kommt bevor der Tag beginnt.", out: "Message sent · 200 OK", tools: ["Telegram Bot API"] }
             },
         ],
         edges: [
-            { from: "w_cron", to: "w_cal1" },
-            { from: "w_cron", to: "w_cal2" },
-            { from: "w_cron", to: "w_cal3" },
-            { from: "w_cal1", to: "w_merge" },
-            { from: "w_cal2", to: "w_merge" },
-            { from: "w_cal3", to: "w_merge" },
-            { from: "w_merge", to: "w_gpt" },
-            { from: "w_gpt", to: "w_send" },
+            { f: "wc0", t: "wc1" }, { f: "wc0", t: "wc2" }, { f: "wc0", t: "wc3" },
+            { f: "wc1", t: "wm0" }, { f: "wc2", t: "wm0" }, { f: "wc3", t: "wm0" },
+            { f: "wm0", t: "wg0" }, { f: "wg0", t: "ws0" },
         ],
-        autoPlay: ["w_cron", "w_cal1", "w_cal2", "w_cal3", "w_merge", "w_gpt", "w_send"],
-        stats: [
-            { label: "Uhrzeit", value: "Mo, 06:00" },
-            { label: "Zeitraum", value: "Mo–So" },
-            { label: "Kalender", value: "3 parallel" },
-        ],
+        seq: ["wc0", "wc1", "wc2", "wc3", "wm0", "wg0", "ws0"],
+        stats: [{ l: "Uhrzeit", v: "Mo 06:00" }, { l: "Zeitraum", v: "Mo–So" }, { l: "Kalender", v: "3×" }, { l: "Tokens", v: "~580" }],
     },
 };
 
-// ─── CONSTANTS ────────────────────────────────────────────────────────────────
-const NW = 162, NH = 68;
-const CATEGORY_COLORS = {
-    TRIGGER: "#F59E0B", ROUTER: "#F59E0B", KI: "#7C6AF7",
-    AKTION: "#00C896", LOGIK: "#7C6AF7",
-};
+const CAT_COLOR: Record<string, string> = { TRIGGER: "#F59E0B", ROUTER: "#F59E0B", KI: "#7C6AF7", AKTION: "#00C896", LOGIK: "#7C6AF7" };
+const SW = 1100, SH = 460;
 
-function ncx(n: any) { return n.x + NW / 2; }
-function ncy(n: any) { return n.y + NH / 2; }
+// ─── helpers ──────────────────────────────────────────────────────────────────
+function ncx(n: any) { return n.x + n.w / 2; }
+function ncy(n: any) { return n.y + n.h / 2; }
 
-// ─── EDGE ─────────────────────────────────────────────────────────────────────
-function Edge({ from, to, animated, color, label }: any) {
+// ─── Arrow edge ───────────────────────────────────────────────────────────────
+function Arrow({ from, to, animated, color, label }: any) {
     const fx = ncx(from), fy = ncy(from);
     const tx = ncx(to), ty = ncy(to);
-    const mx = (fx + tx) / 2;
-    const d = `M${fx},${fy} C${mx},${fy} ${mx},${ty} ${tx},${ty}`;
-    const midX = mx, midY = (fy + ty) / 2;
+    // exit right edge of from-node, enter left edge of to-node
+    const ex = from.x + from.w, ey = fy;
+    const ex2 = to.x, ey2 = ty;
+    const mx = (ex + ex2) / 2;
+    const d = `M${ex},${ey} C${mx},${ey} ${mx},${ey2} ${ex2},${ey2}`;
+    const lx = mx, ly = (ey + ey2) / 2;
 
     return (
         <g>
-            {/* Base line */}
-            <path d={d} fill="none"
-                stroke={animated ? color : "rgba(255,255,255,0.07)"}
-                strokeWidth={animated ? 2 : 1.5}
-                opacity={animated ? 0.8 : 1}
-            />
-            {/* Animated dashes */}
-            {animated && (
-                <path d={d} fill="none" stroke={color}
-                    strokeWidth={2.5} strokeDasharray="6 5"
-                    style={{ animation: "flowDash 0.8s linear infinite" }}
-                    opacity={0.9}
-                />
-            )}
-            {/* Moving dot */}
-            {animated && (
+            {/* ghost base */}
+            <path d={d} fill="none" stroke="rgba(255,255,255,0.055)" strokeWidth={1.5} />
+
+            {/* animated glow line */}
+            {animated && <>
+                <path d={d} fill="none" stroke={color} strokeWidth={3} opacity={0.15}
+                    style={{ filter: `blur(3px)` }} />
+                <path d={d} fill="none" stroke={color} strokeWidth={2}
+                    strokeDasharray="6 4" style={{ animation: "fd .7s linear infinite" }} opacity={0.9} />
                 <circle r={5} fill={color} opacity={0.95}
-                    style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
-                    <animateMotion dur="1s" repeatCount="indefinite" path={d} />
+                    style={{ filter: `drop-shadow(0 0 6px ${color})` }}>
+                    <animateMotion dur="0.9s" repeatCount="indefinite" path={d} />
                 </circle>
-            )}
-            {/* Edge label */}
+            </>}
+
+            {/* arrowhead at destination */}
+            <defs>
+                <marker id={`arr-${from.id}-${to.id}`} markerWidth="6" markerHeight="6"
+                    refX="3" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z"
+                        fill={animated ? color : "rgba(255,255,255,0.12)"}
+                        style={{ transition: "fill 0.3s" }} />
+                </marker>
+            </defs>
+            <path d={d} fill="none" stroke={animated ? color : "rgba(255,255,255,0.12)"}
+                strokeWidth={animated ? 1.5 : 1}
+                markerEnd={`url(#arr-${from.id}-${to.id})`}
+                style={{ transition: "stroke 0.3s" }} />
+
+            {/* edge label */}
             {label && (
                 <g>
-                    <rect x={midX - 26} y={midY - 10} width={52} height={18} rx={4}
-                        fill="#0a150f" stroke={animated ? color : "rgba(255,255,255,0.08)"}
-                        strokeWidth={1} opacity={0.95} />
-                    <text x={midX} y={midY + 1} textAnchor="middle" dominantBaseline="middle"
-                        fill={animated ? color : "rgba(255,255,255,0.3)"}
-                        fontSize={9} fontFamily="monospace">
+                    <rect x={lx - 16} y={ly - 9} width={32} height={17} rx={4}
+                        fill="#07100d" stroke={animated ? color : "rgba(255,255,255,0.07)"} strokeWidth={1} />
+                    <text x={lx} y={ly + 1} textAnchor="middle" dominantBaseline="middle"
+                        fill={animated ? color : "rgba(255,255,255,0.3)"} fontSize={11} fontFamily="monospace">
                         {label}
                     </text>
                 </g>
@@ -372,422 +284,519 @@ function Edge({ from, to, animated, color, label }: any) {
     );
 }
 
-// ─── NODE ─────────────────────────────────────────────────────────────────────
-function WorkflowNode({ node, isActive, isPast, onClick }: any) {
-    const catColor = (CATEGORY_COLORS as any)[node.category] || "#00C896";
+// ─── Node ─────────────────────────────────────────────────────────────────────
+function WNode({ node, active, past, running, onClick }: any) {
+    const cc = CAT_COLOR[node.cat] || "#00C896";
+    const Logo = (LOGOS as any)[node.logo];
     return (
         <g transform={`translate(${node.x},${node.y})`}
-            onClick={() => onClick(node.id)}
-            style={{ cursor: "pointer" }}>
+            onClick={() => onClick(node.id)} style={{ cursor: "pointer" }}>
 
-            {/* Active glow */}
-            {isActive && (
-                <>
-                    <rect x={-8} y={-8} width={NW + 16} height={NH + 16} rx={17}
-                        fill={node.brand} opacity={0.08}
-                        style={{ filter: "blur(10px)" }} />
-                    <rect x={-3} y={-3} width={NW + 6} height={NH + 6} rx={14}
-                        fill="none" stroke={node.brand} strokeWidth={1}
-                        opacity={0.3} strokeDasharray="4 3"
-                        style={{ animation: "rotDash 4s linear infinite" }} />
-                </>
+            {/* outer glow ring when active */}
+            {active && <>
+                <rect x={-7} y={-7} width={node.w + 14} height={node.h + 14} rx={15}
+                    fill={node.brand} opacity={0.07} style={{ filter: "blur(10px)" }} />
+                <rect x={-2} y={-2} width={node.w + 4} height={node.h + 4} rx={11}
+                    fill="none" stroke={node.brand} strokeWidth={1.2} opacity={0.5}
+                    strokeDasharray="5 4" style={{ animation: "rd 3s linear infinite" }} />
+            </>}
+
+            {/* card */}
+            <rect x={0} y={0} width={node.w} height={node.h} rx={10}
+                fill={active ? "#111d15" : past ? "#0c1810" : "#090d0b"}
+                stroke={active ? node.brand : past ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.045)"}
+                strokeWidth={active ? 1.5 : 1}
+                style={{ transition: "fill 0.25s, stroke 0.25s" }} />
+
+            {/* top accent line */}
+            <rect x={12} y={0} width={node.w - 24} height={2} rx={1}
+                fill={cc} opacity={active ? 0.9 : past ? 0.3 : 0.15}
+                style={{ transition: "opacity 0.25s" }} />
+
+            {/* logo */}
+            {Logo && (
+                <foreignObject x={10} y={12} width={28} height={28}>
+                    <div style={{
+                        width: 28, height: 28, borderRadius: 7, overflow: "hidden",
+                        opacity: active ? 1 : past ? 0.6 : 0.4,
+                        transition: "opacity 0.25s",
+                        filter: active ? "none" : "grayscale(30%)"
+                    }}>
+                        <Logo size={28} />
+                    </div>
+                </foreignObject>
             )}
 
-            {/* Card body */}
-            <rect x={0} y={0} width={NW} height={NH} rx={11}
-                fill={isActive ? "#0f1f18" : isPast ? "#0b1812" : "#09120e"}
-                stroke={isActive ? node.brand : isPast ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.05)"}
-                strokeWidth={isActive ? 1.5 : 1}
-                style={{ transition: "all 0.25s ease" }}
-            />
-
-            {/* Category stripe */}
-            <rect x={0} y={0} width={4} height={NH} rx={2}
-                fill={catColor} opacity={isActive ? 0.8 : 0.25} />
-
-            {/* Icon bg */}
-            <rect x={12} y={12} width={42} height={42} rx={9}
-                fill={node.brand} opacity={isActive ? 0.18 : isPast ? 0.08 : 0.06} />
-            <text x={33} y={33} textAnchor="middle" dominantBaseline="middle" fontSize={18}>
-                {node.icon}
-            </text>
-
-            {/* Labels */}
-            <text x={62} y={27}
-                fill={isActive ? "#fff" : isPast ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.5)"}
-                fontSize={11.5} fontWeight={isActive ? "700" : "500"}
-                fontFamily="'Space Grotesk', sans-serif"
-                style={{ transition: "all 0.2s" }}>
+            {/* text */}
+            <text x={46} y={24}
+                fill={active ? "#ffffff" : past ? "rgba(255,255,255,0.62)" : "rgba(255,255,255,0.38)"}
+                fontSize={11} fontWeight={active ? "700" : "500"}
+                fontFamily="'Space Grotesk',sans-serif"
+                style={{ transition: "fill 0.2s" }}>
                 {node.label}
             </text>
-            <text x={62} y={44}
-                fill={isActive ? node.brand : "rgba(255,255,255,0.28)"}
-                fontSize={9.5} fontFamily="'JetBrains Mono', 'Fira Code', monospace"
-                style={{ transition: "all 0.2s" }}>
-                {node.sublabel}
+            <text x={46} y={40}
+                fill={active ? node.brand : "rgba(255,255,255,0.22)"}
+                fontSize={9} fontFamily="monospace"
+                style={{ transition: "fill 0.2s" }}>
+                {node.sub}
             </text>
 
-            {/* Category badge */}
-            <text x={NW - 8} y={12}
-                textAnchor="end"
-                fill={catColor} opacity={isActive ? 0.7 : 0.2}
-                fontSize={7.5} fontFamily="monospace" letterSpacing="0.05em">
-                {node.category}
+            {/* cat chip top-right */}
+            <rect x={node.w - 48} y={6} width={42} height={13} rx={3}
+                fill={cc} opacity={active ? 0.18 : 0.06} />
+            <text x={node.w - 27} y={14} textAnchor="middle" dominantBaseline="middle"
+                fill={cc} fontSize={7} fontFamily="monospace" letterSpacing="0.06em"
+                opacity={active ? 0.9 : 0.3}>
+                {node.cat}
             </text>
 
-            {/* Done checkmark */}
-            {isPast && !isActive && (
-                <circle cx={NW - 9} cy={NH - 9} r={7} fill="#00C896" opacity={0.2} />
+            {/* running spinner arc */}
+            {running && (
+                <circle cx={node.w - 8} cy={node.h - 8} r={5}
+                    stroke={node.brand} strokeWidth={1.5} fill="none"
+                    strokeDasharray="10 5" style={{ animation: "rd 0.8s linear infinite" }} />
             )}
-            {isPast && !isActive && (
-                <text x={NW - 9} y={NH - 8} textAnchor="middle" dominantBaseline="middle"
-                    fontSize={9} fill="#00C896" opacity={0.6}>✓</text>
+
+            {/* past checkmark */}
+            {past && !active && !running && (
+                <g>
+                    <circle cx={node.w - 8} cy={node.h - 8} r={6} fill="#00C896" opacity={0.15} />
+                    <text x={node.w - 8} y={node.h - 7} textAnchor="middle" dominantBaseline="middle"
+                        fontSize={8} fill="#00C896" opacity={0.55}>✓</text>
+                </g>
             )}
         </g>
     );
 }
 
-// ─── DETAIL PANEL ─────────────────────────────────────────────────────────────
-function DetailPanel({ node, flowColor }: any) {
-    if (!node) return (
-        <div style={{
-            display: "flex", flexDirection: "column", alignItems: "center",
-            justifyContent: "center", height: "100%", gap: 12, opacity: 0.35,
+// ─── Execution Log ────────────────────────────────────────────────────────────
+function ExecLog({ entries, accent }: any) {
+    const ref = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+    }, [entries]);
+    return (
+        <div ref={ref} className="no-scrollbar" style={{
+            background: "rgba(0,0,0,0.45)", borderRadius: 8,
+            border: "1px solid rgba(255,255,255,0.06)",
+            padding: "8px 10px", height: 120, overflowY: "auto",
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 10.5,
         }}>
-            <div style={{ fontSize: 32 }}>←</div>
-            <p style={{
-                color: "rgba(255,255,255,0.4)", fontSize: 11.5, textAlign: "center",
-                lineHeight: 1.6, margin: 0, fontFamily: "'Space Grotesk', sans-serif",
-            }}>
-                Node anklicken<br />für Details
-            </p>
+            {entries.length === 0 && (
+                <div style={{ color: "rgba(255,255,255,0.2)", paddingTop: 40, textAlign: "center", fontSize: 10 }}>
+                    — Workflow bereit —
+                </div>
+            )}
+            {entries.map((e: any, i: number) => (
+                <div key={i} style={{
+                    display: "flex", gap: 8, marginBottom: 4,
+                    animation: "logIn 0.2s ease",
+                    color: i === entries.length - 1 ? "#fff" : "rgba(255,255,255,0.4)",
+                }}>
+                    <span style={{ color: "rgba(255,255,255,0.2)", flexShrink: 0, fontSize: 9.5 }}>
+                        {e.ts}
+                    </span>
+                    <span style={{ color: i === entries.length - 1 ? accent : "rgba(255,255,255,0.4)" }}>
+                        {e.msg}
+                    </span>
+                </div>
+            ))}
         </div>
     );
+}
 
-    const catColor = (CATEGORY_COLORS as any)[node.category] || flowColor;
-
+// ─── Detail Slide Panel ───────────────────────────────────────────────────────
+function DetailSlide({ node, onClose, accent }: any) {
+    if (!node) return null;
+    const cc = CAT_COLOR[node.cat] || accent;
+    const Logo = (LOGOS as any)[node.logo];
     return (
-        <div key={node.id} style={{ animation: "panelIn 0.22s ease", height: "100%" }}>
-            {/* Category badge */}
-            <div style={{
-                display: "inline-flex", alignItems: "center", gap: 5,
-                background: catColor + "18", border: `1px solid ${catColor}30`,
-                borderRadius: 6, padding: "3px 10px", marginBottom: 16,
-            }}>
-                <div style={{ width: 5, height: 5, borderRadius: "50%", background: catColor }} />
-                <span style={{ color: catColor, fontSize: 9.5, fontFamily: "monospace", letterSpacing: "0.1em" }}>
-                    {node.category}
-                </span>
-            </div>
+        <div style={{
+            position: "absolute", bottom: 0, left: 0, right: 0,
+            background: "linear-gradient(180deg,rgba(8,15,11,0.97) 0%,rgba(6,12,9,0.99) 100%)",
+            borderTop: `1px solid ${cc}40`,
+            padding: "16px 22px 14px",
+            animation: "slideUp 0.22s cubic-bezier(.16,1,.3,1)",
+            zIndex: 10,
+            backdropFilter: "blur(12px)",
+        }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 12, flex: 1 }}>
+                    {/* logo */}
+                    <div style={{
+                        width: 36, height: 36, borderRadius: 9, overflow: "hidden", flexShrink: 0,
+                        boxShadow: `0 0 0 1px ${cc}30`, background: "black"
+                    }}>
+                        {Logo && <div className="flex items-center justify-center w-full h-full text-[#07100d]"><Logo size={36} /></div>}
+                    </div>
 
-            {/* Icon + Title */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    {/* title + cat */}
+                    <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                            <h3 style={{
+                                color: "#fff", fontSize: 13, fontWeight: 700, margin: 0,
+                                fontFamily: "'Space Grotesk',sans-serif"
+                            }}>
+                                {node.detail.title}
+                            </h3>
+                            <span style={{
+                                background: cc + "20", border: `1px solid ${cc}30`, color: cc,
+                                borderRadius: 4, padding: "1px 7px", fontSize: 8, fontFamily: "monospace",
+                                letterSpacing: "0.08em"
+                            }}>
+                                {node.cat}
+                            </span>
+                        </div>
+                        <p style={{
+                            color: "rgba(255,255,255,0.45)", fontSize: 11, lineHeight: 1.7, margin: 0,
+                            fontFamily: "'Space Grotesk',sans-serif", maxWidth: 600
+                        }}>
+                            {node.detail.desc}
+                        </p>
+                    </div>
+                </div>
+
+                {/* output + tools right side */}
                 <div style={{
-                    width: 40, height: 40, borderRadius: 10,
-                    background: node.brand + "20", border: `1px solid ${node.brand}30`,
+                    display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end",
+                    marginLeft: 20, flexShrink: 0, minWidth: 200
+                }} className="hidden md:flex">
+                    <div style={{
+                        background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.06)",
+                        borderRadius: 6, padding: "6px 12px", width: "100%"
+                    }}>
+                        <div style={{
+                            color: "rgba(255,255,255,0.18)", fontSize: 7.5, fontFamily: "monospace",
+                            letterSpacing: "0.08em", marginBottom: 3
+                        }}>OUTPUT</div>
+                        <div style={{ color: "#00C896", fontSize: 9.5, fontFamily: "monospace", lineHeight: 1.5 }}>
+                            {node.detail.out}
+                        </div>
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "flex-end" }}>
+                        {node.detail.tools.map((t: string) => (
+                            <span key={t} style={{
+                                background: "rgba(255,255,255,0.04)",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                color: "rgba(255,255,255,0.38)", borderRadius: 4,
+                                padding: "2px 8px", fontSize: 8.5, fontFamily: "monospace"
+                            }}>
+                                {t}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* close */}
+                <button onClick={onClose} style={{
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+                    color: "rgba(255,255,255,0.4)", borderRadius: 5, width: 26, height: 26,
+                    cursor: "pointer", fontSize: 13, marginLeft: 14, flexShrink: 0,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 20, flexShrink: 0,
-                }}>{node.icon}</div>
-                <h3 style={{
-                    color: "#fff", fontSize: 13, fontWeight: 700,
-                    margin: 0, lineHeight: 1.3, fontFamily: "'Space Grotesk', sans-serif",
-                }}>{node.detail.title}</h3>
-            </div>
-
-            {/* Description */}
-            <p style={{
-                color: "rgba(255,255,255,0.52)", fontSize: 11.5,
-                lineHeight: 1.75, margin: "0 0 16px",
-                fontFamily: "'Space Grotesk', sans-serif",
-            }}>{node.detail.desc}</p>
-
-            {/* Output preview */}
-            <div style={{
-                background: "rgba(0,0,0,0.35)", border: "1px solid rgba(255,255,255,0.06)",
-                borderRadius: 7, padding: "8px 12px", marginBottom: 14,
-            }}>
-                <div style={{ color: "rgba(255,255,255,0.2)", fontSize: 8.5, fontFamily: "monospace", marginBottom: 4, letterSpacing: "0.08em" }}>
-                    OUTPUT
-                </div>
-                <div style={{ color: "#00C896", fontSize: 10.5, fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.5 }}>
-                    {node.detail.output}
-                </div>
-            </div>
-
-            {/* Tools */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                {node.detail.tools.map((t: string) => (
-                    <span key={t} style={{
-                        background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                        color: "rgba(255,255,255,0.4)", borderRadius: 5,
-                        padding: "3px 8px", fontSize: 9, fontFamily: "monospace",
-                    }}>{t}</span>
-                ))}
+                    fontFamily: "monospace",
+                }}>×</button>
             </div>
         </div>
     );
 }
 
-// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
+// ─── Main Component ───────────────────────────────────────────────────────────
 export const AutomationFlow = () => {
-    const [flowId, setFlowId] = useState<"input" | "daily" | "weekly">("input");
+    const [fid, setFid] = useState<"input" | "daily" | "weekly">("input");
     const [activeId, setActiveId] = useState<string | null>(null);
     const [pastIds, setPastIds] = useState<string[]>([]);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const [stepIdx, setStepIdx] = useState(0);
-    const intervalRef = useRef<any>(null);
+    const [playing, setPlaying] = useState(true);
+    const [step, setStep] = useState(0);
+    const [logEntries, setLog] = useState<any[]>([]);
+    const [panelNode, setPanelNode] = useState<any>(null);
+    const timerRef = useRef<any>();
 
-    const flow = FLOWS[flowId];
-    const sequence = flow.autoPlay;
+    const flow = FLOWS[fid];
+    const seq = flow.seq;
 
-    // Reset on flow change
-    useEffect(() => {
-        setActiveId(null);
-        setPastIds([]);
-        setStepIdx(0);
-        setIsPlaying(true);
-    }, [flowId]);
-
-    // Auto-play ticker
-    useEffect(() => {
-        if (!isPlaying) return;
-        intervalRef.current = setInterval(() => {
-            setStepIdx(prev => {
-                const next = (prev + 1) % sequence.length;
-                setActiveId(sequence[next]);
-                setPastIds(sequence.slice(0, next));
-                return next;
-            });
-        }, 1400);
-        return () => clearInterval(intervalRef.current);
-    }, [isPlaying, sequence]);
-
-    // Init first step
-    useEffect(() => {
-        if (isPlaying) {
-            setActiveId(sequence[0]);
-            setPastIds([]);
-        }
-    }, [isPlaying, flowId, sequence]);
-
-    const handleNodeClick = (id: string) => {
-        setIsPlaying(false);
-        clearInterval(intervalRef.current);
-        setActiveId(prev => prev === id ? null : id);
+    const ts = () => {
+        const d = new Date();
+        return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
     };
 
-    const handlePlay = () => {
-        setStepIdx(0);
+    const reset = (newFid?: "input" | "daily" | "weekly") => {
+        clearInterval(timerRef.current);
+        const flowId = newFid || fid;
+        const f = FLOWS[flowId];
+        setActiveId(f.seq[0]);
         setPastIds([]);
-        setActiveId(sequence[0]);
-        setIsPlaying(true);
+        setStep(0);
+        setLog([{ ts: ts(), msg: f.nodes.find(n => n.id === f.seq[0])?.log || "" }]);
+        setPanelNode(null);
+        setPlaying(true);
+    };
+
+    useEffect(() => { reset(fid); }, [fid]);
+
+    useEffect(() => {
+        if (!playing) { clearInterval(timerRef.current); return; }
+        timerRef.current = setInterval(() => {
+            setStep(s => {
+                const n = (s + 1) % seq.length;
+                const nid = seq[n];
+                setActiveId(nid);
+                setPastIds(seq.slice(0, n));
+                const node = flow.nodes.find(x => x.id === nid);
+                if (node) setLog(l => [...l.slice(-8), { ts: ts(), msg: node.log }]);
+                return n;
+            });
+        }, 1300);
+        return () => clearInterval(timerRef.current);
+    }, [playing, seq, flow.nodes]);
+
+    const handleNodeClick = (id: string) => {
+        clearInterval(timerRef.current);
+        setPlaying(false);
+        const node = flow.nodes.find(n => n.id === id);
+        setPanelNode((prev: any) => prev?.id === id ? null : node);
+        setActiveId(id);
     };
 
     const activeNode = flow.nodes.find(n => n.id === activeId);
-    const SVG_W = 1060, SVG_H = 440;
 
     return (
         <div style={{
-            background: "#080f0b",
-            borderRadius: 20,
-            border: "1px solid rgba(0,200,150,0.12)",
-            fontFamily: "'Space Grotesk', system-ui, sans-serif",
-            overflow: "hidden",
-            maxWidth: 1060,
-            margin: "0 auto",
-            boxShadow: "0 0 0 1px rgba(0,0,0,0.5), 0 40px 120px rgba(0,0,0,0.7), 0 0 80px rgba(0,200,150,0.04)",
+            background: "#07100d", borderRadius: 16,
+            border: "1px solid rgba(0,200,150,0.1)",
+            fontFamily: "'Space Grotesk',system-ui,sans-serif",
+            overflow: "hidden", maxWidth: 1200, margin: "0 auto",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.7),0 40px 120px rgba(0,0,0,0.8),0 0 80px rgba(0,200,150,0.03)",
         }}>
             <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-        @keyframes flowDash { to { stroke-dashoffset: -22; } }
-        @keyframes rotDash { to { stroke-dashoffset: -40; } }
-        @keyframes panelIn { from { opacity:0; transform:translateX(8px); } to { opacity:1; transform:translateX(0); } }
-        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.85)} }
-        @keyframes tabIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fd{to{stroke-dashoffset:-20}}
+        @keyframes rd{to{stroke-dashoffset:-36}}
+        @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes logIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+        @keyframes tabPop{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
       `}</style>
 
             {/* ── TITLEBAR ── */}
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "11px 20px",
-                borderBottom: "1px solid rgba(255,255,255,0.05)",
-                background: "rgba(255,255,255,0.015)",
+                padding: "8px 16px", borderBottom: "1px solid rgba(255,255,255,0.045)",
+                background: "rgba(0,0,0,0.3)"
             }}>
-                <div className="flex items-center gap-3">
-                    <div style={{ display: "flex", gap: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 5 }}>
                         {["#ff5f57", "#febc2e", "#28c840"].map(c => (
-                            <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c, opacity: 0.9 }} />
+                            <div key={c} style={{ width: 11, height: 11, borderRadius: "50%", background: c }} />
                         ))}
                     </div>
-                    <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 10, fontFamily: "monospace" }}>
-                        rheindorf.digital — automation-engine.n8n
+                    <span style={{ color: "rgba(255,255,255,0.15)", fontSize: 10.5, fontFamily: "JetBrains Mono,monospace", marginLeft: 6 }}>
+                        rheindorf.digital  ·  automation-engine.n8n
                     </span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    {isPlaying ? (
-                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <div style={{
-                                width: 7, height: 7, borderRadius: "50%", background: "#00C896",
-                                animation: "pulse 1.4s ease-in-out infinite",
-                            }} />
-                            <span style={{ color: "#00C896", fontSize: 10, fontFamily: "monospace", letterSpacing: "0.08em" }}>RUNNING</span>
-                        </div>
-                    ) : (
-                        <button onClick={handlePlay} style={{
-                            background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)",
-                            color: "#00C896", borderRadius: 6, padding: "4px 13px",
-                            fontSize: 10, cursor: "pointer", fontFamily: "monospace",
-                            letterSpacing: "0.05em", transition: "all 0.15s",
-                        }}>▶ PLAY</button>
-                    )}
-                    <button onClick={() => setIsPlaying(false)} className="hover:bg-white/5 transition-colors" style={{
-                        background: "transparent", border: "1px solid rgba(255,255,255,0.07)",
-                        color: "rgba(255,255,255,0.3)", borderRadius: 6, padding: "4px 10px",
-                        fontSize: 10, cursor: "pointer", fontFamily: "monospace",
-                    }}>■ PAUSE</button>
+                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    {playing
+                        ? <>
+                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00C896", animation: "blink 1.4s infinite" }} />
+                            <span style={{ color: "#00C896", fontSize: 9.5, fontFamily: "monospace", letterSpacing: "0.08em" }}>RUNNING</span>
+                            <button onClick={() => setPlaying(false)} className="hover:bg-white/10" style={{
+                                marginLeft: 8, background: "rgba(255,255,255,0.05)",
+                                border: "1px solid rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.3)",
+                                borderRadius: 5, padding: "3px 10px", fontSize: 9.5, cursor: "pointer", fontFamily: "monospace"
+                            }}>
+                                ■ PAUSE
+                            </button>
+                        </>
+                        : <button onClick={() => reset()} className="hover:bg-[#00C896]/20" style={{
+                            background: "rgba(0,200,150,0.08)",
+                            border: "1px solid rgba(0,200,150,0.22)", color: "#00C896",
+                            borderRadius: 5, padding: "3px 11px", fontSize: 9.5, cursor: "pointer", fontFamily: "monospace"
+                        }}>
+                            ▶ PLAY
+                        </button>
+                    }
                 </div>
             </div>
 
-            {/* ── FLOW TABS ── */}
-            <div className="flex overflow-x-auto no-scrollbar border-b border-white/5 bg-black/20">
-                {(Object.values(FLOWS) as any).map((f: any) => {
-                    const active = flowId === f.id;
+            {/* ── TABS ── */}
+            <div className="flex overflow-x-auto no-scrollbar" style={{
+                borderBottom: "1px solid rgba(255,255,255,0.045)",
+                background: "rgba(0,0,0,0.15)"
+            }}>
+                {(Object.values(FLOWS) as any[]).map(f => {
+                    const on = fid === f.id;
                     return (
-                        <button key={f.id}
-                            onClick={() => setFlowId(f.id)}
-                            style={{
-                                display: "flex", alignItems: "center", gap: 7,
-                                background: active ? "rgba(255,255,255,0.03)" : "transparent",
-                                border: "none",
-                                borderBottom: active ? `2px solid ${f.accentColor}` : "2px solid transparent",
-                                borderRight: "1px solid rgba(255,255,255,0.04)",
-                                color: active ? "#fff" : "rgba(255,255,255,0.35)",
-                                padding: "11px 22px",
-                                fontSize: 12.5, cursor: "pointer",
-                                fontFamily: "'Space Grotesk', sans-serif",
-                                fontWeight: active ? 600 : 400,
-                                transition: "all 0.15s",
-                                flexShrink: 0,
-                            }}>
+                        <button key={f.id} onClick={() => setFid(f.id)} style={{
+                            display: "flex", alignItems: "center", gap: 6,
+                            background: on ? "rgba(255,255,255,0.025)" : "transparent",
+                            border: "none",
+                            borderBottom: on ? `2px solid ${f.accent}` : "2px solid transparent",
+                            borderRight: "1px solid rgba(255,255,255,0.04)",
+                            color: on ? "#fff" : "rgba(255,255,255,0.28)",
+                            padding: "8px 20px", fontSize: 12, cursor: "pointer",
+                            fontFamily: "'Space Grotesk',sans-serif", fontWeight: on ? 600 : 400,
+                            transition: "all 0.14s", flexShrink: 0,
+                        }}>
                             <span style={{ fontSize: 14 }}>{f.emoji}</span>
                             {f.label}
-                            {active && (
-                                <div style={{
-                                    width: 6, height: 6, borderRadius: "50%",
-                                    background: f.accentColor, opacity: 0.8, marginLeft: 2,
-                                    animation: isPlaying ? "pulse 1.4s infinite" : "none",
-                                }} />
-                            )}
+                            {on && playing && <div style={{
+                                width: 5, height: 5, borderRadius: "50%",
+                                background: f.accent, animation: "blink 1.4s infinite", marginLeft: 2
+                            }} />}
                         </button>
                     );
                 })}
-                {/* Description */}
-                <div style={{
-                    marginLeft: "auto", display: "flex", alignItems: "center",
-                    paddingRight: 20, color: "rgba(255,255,255,0.2)",
-                    fontSize: 11, fontFamily: "monospace",
-                }} className="hidden md:flex">
-                    {flow.description}
+                <div className="hidden md:flex" style={{
+                    flex: 1, alignItems: "center", justifyContent: "flex-end",
+                    paddingRight: 16, color: "rgba(255,255,255,0.13)", fontSize: 10, fontFamily: "monospace"
+                }}>
+                    {flow.tagline}
                 </div>
             </div>
 
-            {/* ── CANVAS + PANEL ── */}
-            <div className="flex flex-col lg:flex-row">
+            {/* ── MAIN BODY ── */}
+            <div className="flex flex-col lg:flex-row relative">
 
                 {/* SVG Canvas */}
                 <div className="flex-1 min-w-0 relative overflow-x-auto no-scrollbar">
-                    <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-                        className="min-w-[800px] lg:min-w-[1060px]"
-                        style={{ width: "100%", height: "auto", display: "block" }}>
+                    <svg viewBox={`0 0 ${SW} ${SH}`} className="min-w-[800px] lg:min-w-[800px]" style={{ width: "100%", height: "auto", display: "block" }}>
                         <defs>
-                            <pattern id="grid2" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                                <circle cx="1" cy="1" r="0.9" fill="rgba(255,255,255,0.025)" />
+                            <pattern id="dotgrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+                                <circle cx="1" cy="1" r="0.85" fill="rgba(255,255,255,0.02)" />
                             </pattern>
-                            {/* Radial glow for active area */}
-                            <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
-                                <stop offset="0%" stopColor={flow.accentColor} stopOpacity="0.04" />
-                                <stop offset="100%" stopColor={flow.accentColor} stopOpacity="0" />
+                            <radialGradient id="rglow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stopColor={flow.accent} stopOpacity="0.04" />
+                                <stop offset="100%" stopColor={flow.accent} stopOpacity="0" />
                             </radialGradient>
                         </defs>
-                        <rect width={SVG_W} height={SVG_H} fill="url(#grid2)" />
-                        <rect width={SVG_W} height={SVG_H} fill="url(#centerGlow)" />
+                        <rect width={SW} height={SH} fill="url(#dotgrid)" />
+                        <rect width={SW} height={SH} fill="url(#rglow)" />
 
-                        {/* Edges */}
+                        {/* edges first (behind nodes) */}
                         {flow.edges.map((e, i) => {
-                            const fromNode = flow.nodes.find(n => n.id === e.from);
-                            const toNode = flow.nodes.find(n => n.id === e.to);
-                            const isAnim = isPlaying
-                                ? (activeId === e.from || activeId === e.to || pastIds.includes(e.from))
-                                : (activeId === e.from || activeId === e.to);
-                            return (
-                                <Edge key={i} from={fromNode} to={toNode}
-                                    animated={isAnim} color={flow.accentColor} label={e.label} />
-                            );
+                            const fn = flow.nodes.find(n => n.id === e.f);
+                            const tn = flow.nodes.find(n => n.id === e.t);
+                            if (!fn || !tn) return null;
+                            const anim = playing
+                                ? (activeId === e.f || activeId === e.t || pastIds.includes(e.f))
+                                : (activeId === e.f || activeId === e.t);
+                            return <Arrow key={i} from={fn} to={tn} animated={anim} color={flow.accent} label={e.label} />;
                         })}
 
-                        {/* Nodes */}
-                        {flow.nodes.map(node => (
-                            <WorkflowNode key={node.id} node={node}
-                                isActive={activeId === node.id}
-                                isPast={pastIds.includes(node.id)}
+                        {/* nodes */}
+                        {flow.nodes.map(n => (
+                            <WNode key={n.id} node={n}
+                                active={activeId === n.id}
+                                past={pastIds.includes(n.id)}
+                                running={playing && activeId === n.id}
                                 onClick={handleNodeClick} />
                         ))}
 
-                        {/* Step counter */}
-                        {isPlaying && (
-                            <text x={SVG_W - 14} y={SVG_H - 10} textAnchor="end"
-                                fill="rgba(255,255,255,0.2)" fontSize={10} fontFamily="monospace">
-                                STEP {stepIdx + 1} / {sequence.length}
-                            </text>
-                        )}
+                        {/* step counter */}
+                        {playing && <text x={SW - 10} y={SH - 8} textAnchor="end"
+                            fill="rgba(255,255,255,0.08)" fontSize={10} fontFamily="monospace">
+                            {step + 1} / {seq.length}
+                        </text>}
                     </svg>
+
+                    {/* Detail slide panel (absolute, inside canvas area) */}
+                    <DetailSlide node={panelNode} onClose={() => setPanelNode(null)} accent={flow.accent} />
                 </div>
 
-                {/* Detail Panel */}
+                {/* RIGHT: Execution Log */}
                 <div style={{
-                    width: "100%", borderLeft: "0px",
-                    padding: "22px 18px", background: "rgba(0,0,0,0.22)",
-                }} className="lg:w-[248px] lg:border-l lg:border-white/5">
-                    <DetailPanel node={activeNode} flowColor={flow.accentColor} />
+                    width: "100%", borderLeft: "0px solid rgba(255,255,255,0.05)",
+                    padding: "14px 13px", background: "rgba(0,0,0,0.22)",
+                    display: "flex", flexDirection: "column", gap: 10
+                }} className="lg:w-[260px] lg:border-l">
+
+                    {/* active node summary */}
+                    {activeNode && (
+                        <div style={{
+                            background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)",
+                            borderRadius: 8, padding: "9px 11px", animation: "logIn 0.2s ease"
+                        }}>
+                            <div style={{
+                                fontSize: 8.5, color: "rgba(255,255,255,0.2)", fontFamily: "monospace",
+                                letterSpacing: "0.07em", marginBottom: 5
+                            }}>AKTIVER NODE</div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                                <div style={{ fontSize: 16, width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    {activeNode.logo && (LOGOS as any)[activeNode.logo] ? React.createElement((LOGOS as any)[activeNode.logo], { size: 20 }) : <span>⚡</span>}
+                                </div>
+                                <div>
+                                    <div style={{
+                                        color: "#fff", fontSize: 11.5, fontWeight: 600,
+                                        fontFamily: "'Space Grotesk',sans-serif"
+                                    }}>
+                                        {activeNode.label}
+                                    </div>
+                                    <div style={{ color: flow.accent, fontSize: 9, fontFamily: "monospace", marginTop: 1 }}>
+                                        {activeNode.sub}
+                                    </div>
+                                </div>
+                            </div>
+                            {!playing && (
+                                <div style={{
+                                    marginTop: 8, fontSize: 9.5, color: "rgba(255,255,255,0.3)",
+                                    fontFamily: "'Space Grotesk',sans-serif", lineHeight: 1.5
+                                }}>
+                                    {activeNode.detail.desc.slice(0, 80)}…
+                                    <span style={{ color: flow.accent, cursor: "pointer", marginLeft: 4 }}
+                                        onClick={() => setPanelNode(activeNode)}>
+                                        mehr ↓
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* exec log */}
+                    <div>
+                        <div style={{
+                            fontSize: 8.5, color: "rgba(255,255,255,0.2)", fontFamily: "monospace",
+                            letterSpacing: "0.07em", marginBottom: 6
+                        }}>EXECUTION LOG</div>
+                        <ExecLog entries={logEntries} accent={flow.accent} />
+                    </div>
+
+                    {/* stats */}
+                    <div style={{ marginTop: "auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                        {flow.stats.map(s => (
+                            <div key={s.l} style={{
+                                background: "rgba(255,255,255,0.025)",
+                                border: "1px solid rgba(255,255,255,0.05)", borderRadius: 6, padding: "6px 8px"
+                            }}>
+                                <div style={{
+                                    color: "rgba(255,255,255,0.2)", fontSize: 8, fontFamily: "monospace",
+                                    letterSpacing: "0.05em"
+                                }}>{s.l.toUpperCase()}</div>
+                                <div style={{ color: flow.accent, fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+                                    {s.v}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            {/* ── FOOTER STATS ── */}
-            <div className="border-t border-white/5 p-4 py-3 flex flex-col md:flex-row items-center gap-4 bg-black/20">
-                {/* Flow stats */}
-                <div className="flex gap-6 md:gap-12 w-full md:w-auto overflow-x-auto no-scrollbar">
-                    {flow.stats.map(s => (
-                        <div key={s.label} className="shrink-0">
-                            <div style={{ color: "rgba(255,255,255,0.22)", fontSize: 9, fontFamily: "monospace", letterSpacing: "0.06em" }}>
-                                {s.label.toUpperCase()}
-                            </div>
-                            <div style={{ color: flow.accentColor, fontSize: 13, fontWeight: 600, marginTop: 2 }}>
-                                {s.value}
-                            </div>
+            {/* ── FOOTER ── */}
+            <div className="flex flex-col md:flex-row items-center" style={{
+                borderTop: "1px solid rgba(255,255,255,0.04)",
+                padding: "7px 18px",
+                background: "rgba(0,0,0,0.2)"
+            }}>
+                <div className="flex gap-4 md:gap-14 items-center flex-1 flex-wrap justify-center md:justify-start py-2 md:py-0">
+                    {[["TRIGGER", "#F59E0B"], ["KI", "#7C6AF7"], ["AKTION", "#00C896"], ["LOGIK", "#7C6AF7"], ["ROUTER", "#F59E0B"]].map(([k, v]) => (
+                        <div key={k} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                            <div style={{ width: 5, height: 5, borderRadius: "50%", background: v }} />
+                            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 8.5, fontFamily: "monospace" }}>{k}</span>
                         </div>
                     ))}
                 </div>
-
-                {/* Divider */}
-                <div className="hidden md:block w-px h-7 bg-white/5 mx-2" />
-
-                {/* Node legend */}
-                <div className="flex flex-wrap gap-4 items-center">
-                    {Object.entries(CATEGORY_COLORS).filter(([k]) => ["TRIGGER", "KI", "AKTION", "LOGIK"].includes(k)).map(([k, v]) => (
-                        <div key={k} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: v }} />
-                            <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 9, fontFamily: "monospace" }}>{k}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Hint */}
-                <div style={{
-                    marginLeft: "auto", color: "rgba(255,255,255,0.15)",
-                    fontSize: 10, fontFamily: "monospace",
-                }} className="hidden lg:block">
-                    {isPlaying ? "← Klick pausiert & zeigt Details" : "Node anklicken · PLAY für Animation"}
-                </div>
+                <span className="hidden md:inline-block" style={{ color: "rgba(255,255,255,0.1)", fontSize: 9.5, fontFamily: "monospace" }}>
+                    {playing ? "Node anklicken pausiert + zeigt Details" : "▶ PLAY · oder Node anklicken für Details ↓"}
+                </span>
             </div>
         </div>
     );
