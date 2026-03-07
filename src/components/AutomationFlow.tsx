@@ -658,10 +658,11 @@ export const AutomationFlow = () => {
             <div className="flex flex-col lg:flex-row relative">
 
                 {/* SVG Canvas */}
-                <div className="flex-1 min-w-0 relative overflow-x-auto no-scrollbar">
-                    <svg viewBox={`0 0 ${SW} ${SH}`} className="min-w-[800px] lg:min-w-[800px]" style={{ width: "100%", height: "auto", display: "block" }}>
+                <div className="flex-1 min-w-0 min-h-[460px] lg:min-h-0 relative overflow-x-auto no-scrollbar">
+                    <svg viewBox={`0 0 ${SW} ${SH}`} className="w-full lg:w-auto min-w-[800px] h-full block">
                         <defs>
                             <pattern id="dotgrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+
                                 <circle cx="1" cy="1" r="0.85" fill="rgba(255,255,255,0.02)" />
                             </pattern>
                             <radialGradient id="rglow" cx="50%" cy="50%" r="50%">
@@ -705,10 +706,10 @@ export const AutomationFlow = () => {
 
                 {/* RIGHT: Execution Log */}
                 <div style={{
-                    width: "100%", borderLeft: "0px solid rgba(255,255,255,0.05)",
+                    borderLeft: "0px solid rgba(255,255,255,0.05)",
                     padding: "14px 13px", background: "rgba(0,0,0,0.22)",
                     display: "flex", flexDirection: "column", gap: 10
-                }} className="lg:w-[260px] lg:border-l">
+                }} className="flex-none w-full lg:w-[260px] lg:border-l">
 
                     {/* active node summary */}
                     {activeNode && (
