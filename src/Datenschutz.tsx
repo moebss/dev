@@ -42,8 +42,10 @@ export const Datenschutz = ({ onClose }: { onClose: () => void }) => (
                 <div>
                     <h3 className="font-semibold mb-1" style={{ color: 'var(--color-text-heading)' }}>3. Kontaktaufnahme</h3>
                     <p>
-                        Wenn Sie per E-Mail Kontakt mit mir aufnehmen, werden Ihre Angaben zwecks Bearbeitung der Anfrage und für
-                        den Fall von Anschlussfragen bei mir gespeichert. Diese Daten gebe ich nicht ohne Ihre Einwilligung weiter.
+                        Wenn Sie per E-Mail oder über das Kontaktformular Kontakt mit mir aufnehmen, werden Ihre Angaben zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei mir gespeichert. Diese Daten gebe ich nicht ohne Ihre Einwilligung weiter.
+                    </p>
+                    <p className="mt-2">
+                        Für die Verarbeitung der Kontaktformular-Anfragen nutze ich den Dienst <strong>Web3Forms</strong>. Ihre Daten (Name, E-Mail, Nachricht) werden zur Zustellung an mich über die Server von Web3Forms verarbeitet. Weitere Informationen finden Sie in der Datenschutzerklärung von <a href="https://web3forms.com/privacy" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">Web3Forms</a>.
                     </p>
                 </div>
 
