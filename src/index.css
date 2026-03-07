@@ -103,12 +103,16 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-cyan-500;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-    transform: translateZ(0);
+    color: #10b981;
+    /* Fallback: emerald-500 */
+
+    @supports (background-clip: text) or (-webkit-background-clip: text) {
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-cyan-500;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
   }
 
   .grid-pattern {
