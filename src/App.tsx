@@ -876,98 +876,7 @@ const About = () => (
   </section>
 );
 
-const Testimonials = () => {
-  const testimonials = [
-    {
-      name: "Marco S.",
-      initials: "MS",
-      gradient: "from-emerald-500 to-cyan-500",
-      role: "Geschäftsführer, IT-Dienstleistung",
-      text: "Alexander hat unsere internen Abläufe komplett auf den Kopf gestellt – im besten Sinne. Wo vorher Excel-Listen und E-Mail-Chaos herrschten, laufen jetzt automatisierte Workflows.",
-      highlight: "Zeitersparnis von 12 Stunden pro Woche"
-    },
-    {
-      name: "Sarah K.",
-      initials: "SK",
-      gradient: "from-violet-500 to-pink-500",
-      role: "Inhaberin, Kreativagentur",
-      text: "Endlich eine Website, die nicht nur gut aussieht, sondern auch konvertiert. Alexander hat verstanden, was unser Business braucht – nicht was gerade trendy ist.",
-      highlight: "3x mehr Anfragen seit Launch"
-    },
-    {
-      name: "Thomas W.",
-      initials: "TW",
-      gradient: "from-amber-500 to-orange-500",
-      role: "Leiter Vertrieb, Mittelstand",
-      text: "Der Lead-Workflow hat unseren Vertrieb transformiert. Leads werden jetzt in Sekunden qualifiziert und zugewiesen statt in Stunden. Das hätte ich nie für möglich gehalten.",
-      highlight: "Reaktionszeit von 4h auf 2 Min."
-    }
-  ];
 
-  return (
-    <section id="testimonials" className="py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Kundenstimmen</h2>
-          <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Was meine Kunden sagen</h3>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="relative p-8 rounded-2xl border hover:border-emerald-500/30 transition-all group" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
-            >
-              {/* Quote icon */}
-              <div className="absolute -top-3 -left-1 w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                <Quote className="w-4 h-4 text-emerald-500" />
-              </div>
-
-              <p className="leading-relaxed mb-6 mt-2" style={{ color: 'var(--color-text-primary)' }}>
-                "{t.text}"
-              </p>
-
-              {/* Highlight stat */}
-              <div className="px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 mb-6 inline-block">
-                <span className="text-emerald-400 text-xs font-mono font-bold">{t.highlight}</span>
-              </div>
-
-              <div className="border-t pt-5 flex items-center gap-3" style={{ borderColor: 'var(--color-border)' }}>
-                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
-                  {t.initials}
-                </div>
-                <div>
-                  <p className="font-bold text-sm">{t.name}</p>
-                  <p className="text-xs font-mono" style={{ color: 'var(--color-text-muted)' }}>{t.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Mid-page CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all group"
-          >
-            Jetzt Erstgespräch vereinbaren
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <p className="text-zinc-500 text-xs font-mono mt-3">Kostenlos & unverbindlich</p>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
 
 const BlogPreview = ({ onNavigate }: { onNavigate: (hash: string) => void }) => {
   const latestPosts = blogPosts.slice(0, 3);
@@ -1089,7 +998,7 @@ export default function App() {
         <Services />
         <WorkflowsPreview />
         <About />
-        <Testimonials />
+
         <BlogPreview onNavigate={navigate} />
         <Contact />
         <FAQ />
