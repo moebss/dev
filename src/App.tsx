@@ -191,7 +191,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative pt-40 pb-32 overflow-hidden grid-pattern">
+    <section className="relative pt-32 pb-20 overflow-hidden grid-pattern">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -219,30 +219,20 @@ const Hero = () => {
               <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all -ml-2 group-hover:ml-0" />
             </a>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1] md:leading-[1.0]">
-            Wir bauen digitale Infrastruktur, die <span className="text-gradient">Umsatz skaliert</span> & Zeit befreit.
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] md:leading-[0.95]">
+            Mehr Kunden, weniger Aufwand – durch <span className="text-gradient">Websites & Workflows</span>, die für dich arbeiten.
           </h1>
           <p className="text-xl mb-8 font-mono min-h-[1.5em]" style={{ color: 'var(--color-text-secondary)' }}>
             {text}<span className="animate-pulse">_</span>
           </p>
-          <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-12">
-            <a href="#contact" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all gap-2 group shadow-xl shadow-emerald-500/10">
-              Kostenloses Erstgespräch anfragen
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+            <a href="#contact" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all gap-2 group">
+              Kostenloses Erstgespräch
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#projects" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 font-bold rounded-xl transition-all hover:bg-white/5" style={{ backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--color-border-strong)', color: 'var(--color-text-heading)' }}>
-              Portfolio ansehen
+            <a href="#projects" className="w-full sm:w-auto flex justify-center items-center px-8 py-4 font-bold rounded-xl transition-all" style={{ backgroundColor: 'var(--color-bg-card)', border: '1px solid var(--color-border-strong)', color: 'var(--color-text-heading)' }}>
+              Arbeiten ansehen
             </a>
-          </div>
-
-          {/* Social Proof / Trusted By */}
-          <div className="flex flex-col gap-4 opacity-60">
-            <p className="text-[10px] font-mono uppercase tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>Vertraut von Unternehmen aus der Region</p>
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-4 filter grayscale hover:grayscale-0 transition-all duration-500">
-              <span className="font-bold text-xl tracking-tight opacity-40">WACHSTUMSWERK</span>
-              <span className="font-bold text-xl tracking-tight opacity-40 italic">Bürgerbrief</span>
-              <span className="font-bold text-xl tracking-tight opacity-40">KryptoKölsch</span>
-            </div>
           </div>
 
           {/* Mobile skill tags - visible when terminal is hidden */}
@@ -382,107 +372,45 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-24 md:py-32" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+    <section id="services" className="py-16 md:py-24" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16">
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Leistungen</h2>
-          <h3 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--color-text-heading)' }}>Digitale Hebel für dein <span className="text-gradient">Wachstum</span>.</h3>
+          <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Was ich für dich tun kann</h3>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:auto-rows-[280px]">
-          {/* Web Dev - Large Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="md:col-span-4 md:row-span-2 p-8 md:p-12 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all group relative overflow-hidden flex flex-col justify-between"
-            style={{ backgroundColor: 'var(--color-bg-card)' }}
-          >
-            <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 blur-[80px] rounded-full -mr-20 -mt-20 group-hover:bg-emerald-500/10 transition-all" />
-
-            <div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 border border-emerald-500/20">
-                <Globe className="w-6 h-6" />
+        <div className="grid md:grid-cols-3 gap-8">
+          {services.map((service, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.15 }}
+              whileHover={{ y: -5 }}
+              className="p-8 rounded-2xl border hover:border-emerald-500/50 transition-all group" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
+            >
+              {/* Illustration */}
+              <div className="mb-6 opacity-70 group-hover:opacity-100 transition-opacity">
+                {service.illustration}
               </div>
-              <h4 className="text-3xl font-bold mb-4">Premium Web Development</h4>
-              <p className="text-lg max-w-xl leading-relaxed mb-8" style={{ color: 'var(--color-text-secondary)' }}>
-                Ich entwickle Webseiten, die nicht nur gut aussehen, sondern als echte Verkaufsmaschinen funktionieren. Schnelle Ladezeiten, SEO-optimiert und perfekt auf deine Zielgruppe abgestimmt.
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:scale-110 transition-transform">
+                  {service.icon}
+                </div>
+                <h4 className="text-xl font-bold">{service.title}</h4>
+              </div>
+              <p className="mb-6 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                {service.description}
               </p>
-            </div>
-
-            <div className="flex flex-wrap gap-2 mt-auto">
-              {["React", "TypeScript", "Vite", "Next.js", "Performance Optimization"].map(tag => (
-                <span key={tag} className="text-[10px] font-mono px-3 py-1.5 rounded-full border border-white/5 uppercase" style={{ backgroundColor: 'var(--color-bg-tag)', color: 'var(--color-text-muted)' }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* AI & Automation - Medium Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="md:col-span-2 md:row-span-2 p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all group relative overflow-hidden bg-emerald-500/[0.02]"
-            style={{ backgroundColor: 'var(--color-bg-card)' }}
-          >
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 border border-emerald-500/20">
-              <Cpu className="w-6 h-6" />
-            </div>
-            <h4 className="text-2xl font-bold mb-4 leading-tight">KI-Agenten & Automatisierung</h4>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--color-text-secondary)' }}>
-              Befreie dich von repetitiven Aufgaben. Ich integriere intelligente KI-Workflows und Agenten, die 24/7 für dich arbeiten – von Lead-Qualifizierung bis Customer Support.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {["KI", "n8n", "OpenAI", "Workflows"].map(tag => (
-                <span key={tag} className="text-[10px] font-mono px-3 py-1.5 rounded-full border border-white/5 uppercase" style={{ backgroundColor: 'var(--color-bg-tag)', color: 'var(--color-text-muted)' }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Strategy & Analytics - Small Card / Footer Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="md:col-span-3 md:row-span-1 p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all group relative overflow-hidden"
-            style={{ backgroundColor: 'var(--color-bg-card)' }}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-xl font-bold mb-2">Digitale Strategie</h4>
-                <p className="text-sm max-w-xs" style={{ color: 'var(--color-text-secondary)' }}>Ehrliche Beratung für deine digitale Roadmap.</p>
+              <div className="flex flex-wrap gap-2">
+                {service.tags.map(tag => (
+                  <span key={tag} className="text-[10px] font-mono px-2 py-1 rounded uppercase" style={{ backgroundColor: 'var(--color-bg-tag)', color: 'var(--color-text-muted)' }}>
+                    {tag}
+                  </span>
+                ))}
               </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
-                <Layers className="w-5 h-5" />
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Support & Maintenance - Small Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="md:col-span-3 md:row-span-1 p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all group relative overflow-hidden"
-            style={{ backgroundColor: 'var(--color-bg-card)' }}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-xl font-bold mb-2">Technischer Support</h4>
-                <p className="text-sm max-w-xs" style={{ color: 'var(--color-text-secondary)' }}>Sicherheit und Updates für deine Infrastruktur.</p>
-              </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
-                <Zap className="w-5 h-5" />
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
@@ -497,15 +425,15 @@ const WorkflowsPreview = () => {
   });
 
   return (
-    <section id="projects" className="py-24 md:py-32">
+    <section id="projects" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Workflows Section */}
         <div className="flex items-end justify-between mb-16">
           <div>
             <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Portfolio</h2>
-            <h3 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--color-text-heading)' }}>KI <span className="text-gradient">&</span> Automatisierung.</h3>
+            <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Workflows</h3>
           </div>
-          <button onClick={() => window.location.hash = "#/projects"} className="hidden md:flex items-center gap-2 hover:text-emerald-500 transition-colors font-mono text-xs uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>
+          <button onClick={() => window.location.hash = "#/projects"} className="hidden md:flex items-center gap-2 hover:text-emerald-500 transition-colors" style={{ color: 'var(--color-text-secondary)' }}>
             Alle Workflows <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -518,37 +446,31 @@ const WorkflowsPreview = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
+                whileHover={{ y: -5 }}
                 onClick={() => window.location.hash = "#/projects"}
-                className="group cursor-pointer p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all relative overflow-hidden flex flex-col"
-                style={{ backgroundColor: 'var(--color-bg-card)' }}
+                className="group cursor-pointer p-6 rounded-2xl border hover:border-emerald-500/50 transition-all" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[40px] rounded-full -mr-16 -mt-16 group-hover:bg-emerald-500/10 transition-all" />
-
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-6 group-hover:scale-110 transition-transform border border-emerald-500/20">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 transition-transform">
                   <IconComponent className="w-6 h-6" />
                 </div>
-                <p className="text-[10px] font-mono text-emerald-500/60 uppercase tracking-widest mb-2 font-bold">
+                <p className="text-xs font-mono text-emerald-500 mb-2">
                   {wf.categories[0]}
                 </p>
-                <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-3 tracking-tight">{wf.name}</h4>
-                <p className="text-sm leading-relaxed mb-6 flex-1" style={{ color: 'var(--color-text-secondary)' }}>{wf.description}</p>
-
-                <div className="flex items-center gap-2 text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity text-emerald-500">
-                  Details ansehen <ArrowRight className="w-3 h-3" />
-                </div>
+                <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-2">{wf.name}</h4>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{wf.description}</p>
               </motion.div>
             );
           })}
         </div>
 
         {/* Web Development Section */}
-        <div className="flex items-end justify-between mb-16 mt-32">
+        <div className="flex items-end justify-between mb-16 mt-24">
           <div>
             <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Portfolio</h2>
-            <h3 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--color-text-heading)' }}>Web <span className="text-gradient">Experiences</span>.</h3>
+            <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Web Development</h3>
           </div>
-          <button onClick={() => window.location.hash = "#/websites"} className="hidden md:flex items-center gap-2 hover:text-emerald-500 transition-colors font-mono text-xs uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>
-            Alle Webseiten <ArrowRight className="w-4 h-4" />
+          <button onClick={() => window.location.hash = "#/websites"} className="hidden md:flex items-center gap-2 hover:text-emerald-500 transition-colors" style={{ color: 'var(--color-text-secondary)' }}>
+            Webseiten <ArrowRight className="w-4 h-4" />
           </button>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -574,25 +496,22 @@ const WorkflowsPreview = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
+              whileHover={{ y: -5 }}
               onClick={() => window.location.hash = "#/websites"}
-              className="group cursor-pointer p-6 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all flex flex-col relative overflow-hidden"
-              style={{ backgroundColor: 'var(--color-bg-card)' }}
+              className="group cursor-pointer p-6 rounded-2xl border hover:border-emerald-500/50 transition-all flex flex-col" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
             >
-              {project.img && (
-                <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden bg-black/20 mb-6 border border-white/5 group-hover:border-emerald-500/30 transition-all shadow-2xl">
-                  <img src={project.img} alt={project.title} className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[8s] ease-in-out" />
+              {project.img ? (
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-emerald-500/5 mb-5 border group-hover:border-emerald-500/50 transition-colors" style={{ borderColor: 'var(--color-border)' }}>
+                  <img src={project.img} alt={project.title} className="w-full h-full object-cover object-top group-hover:object-bottom transition-all duration-[6s] ease-in-out" />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 transition-transform">
+                  <Globe className="w-6 h-6" />
                 </div>
               )}
-              <div className="flex items-center gap-2 mb-3">
-                <p className="text-[10px] font-mono text-emerald-500/60 uppercase tracking-widest font-bold">Web Case Study</p>
-                <div className="h-px flex-1 bg-white/5" />
-              </div>
-              <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-2 tracking-tight">{project.title}</h4>
-              <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: 'var(--color-text-secondary)' }}>{project.desc}</p>
-
-              <div className="flex items-center gap-2 text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity text-emerald-500">
-                Case ansehen <ArrowRight className="w-3 h-3" />
-              </div>
+              <p className="text-xs font-mono text-emerald-500 mb-2">Web Development</p>
+              <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-2">{project.title}</h4>
+              <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--color-text-secondary)' }}>{project.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -642,7 +561,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-24 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] blur-[150px] rounded-full pointer-events-none" style={{ backgroundColor: 'var(--color-glow)' }} />
 
@@ -656,11 +575,11 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Kontakt</h2>
-            <h3 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight" style={{ color: 'var(--color-text-heading)' }}>
-              Bereit für <span className="text-gradient">echtes Wachstum</span>?
+            <h3 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight" style={{ color: 'var(--color-text-heading)' }}>
+              Hast du ein <span className="text-gradient">Projekt</span> im Kopf?
             </h3>
-            <p className="text-lg mb-10 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              Lass uns unverbindlich darüber sprechen, wie wir deine Prozesse automatisieren und deine digitale Präsenz auf das nächste Level heben. Ich antworte garantiert innerhalb von 24 Stunden.
+            <p className="text-lg mb-8 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+              Schreib mir eine Nachricht – ich melde mich innerhalb von 24 Stunden bei dir. Ob erstes Kennenlernen, konkretes Projekt oder einfach eine Frage.
             </p>
             <div className="space-y-4">
               <a href="mailto:hello@rheindorf.digital" className="flex items-center gap-3 hover:text-emerald-500 transition-colors group" style={{ color: 'var(--color-text-primary)' }}>
@@ -804,18 +723,18 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-24 md:py-32" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+    <section id="faq" className="py-16 md:py-24" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
       <div className="max-w-3xl mx-auto px-6">
-        <div className="mb-20 text-center">
+        <div className="mb-16 text-center">
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">FAQ</h2>
-          <h3 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--color-text-heading)' }}>Häufige <span className="text-gradient">Fragen</span>.</h3>
+          <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Häufige Fragen</h3>
         </div>
-        <div className="space-y-4 max-w-2xl mx-auto">
+        <div className="space-y-4">
           {faqs.map((faq, idx) => (
             <motion.div
               key={idx}
               initial={false}
-              className="rounded-2xl border border-white/5 hover:border-emerald-500/20 overflow-hidden transition-all bg-white/[0.02]"
+              className="rounded-2xl border overflow-hidden" style={{ borderColor: 'var(--color-border)' }}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -947,7 +866,7 @@ const Footer = ({ onShowImpressum, onShowDatenschutz }: { onShowImpressum: () =>
 );
 
 const About = () => (
-  <section id="about" className="py-24 md:py-32" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+  <section id="about" className="py-16 md:py-24" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <div className="relative">
@@ -965,36 +884,28 @@ const About = () => (
         </div>
         <div>
           <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Über mich</h2>
-          <h3 className="text-4xl md:text-5xl font-bold mb-8 leading-tight" style={{ color: 'var(--color-text-heading)' }}>
-            Vom Entwickler zum <span className="text-gradient">Growth Partner</span>.
-          </h3>
-          <div className="space-y-6 text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-            <p>
-              Ich baue keine einfachen Webseiten – ich baue digitale Infrastruktur, die Resultate liefert. Mein Fokus liegt an der Schnittstelle zwischen **High-End Design, technischer Exzellenz und geschäftlichem Wachstum**.
-            </p>
-            <p>
-              In einer Welt, die von KI und Automatisierung transformiert wird, helfe ich Unternehmen dabei, diese Werkzeuge nicht nur zu nutzen, sondern sie als strategischen Wettbewerbsvorteil zu etablieren.
-            </p>
-
-            <div className="pt-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-white/5 mt-8">
-              <div>
-                <h4 className="font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text-heading)' }}>
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  Strategie
-                </h4>
-                <p className="text-sm opacity-70">Kein Code ohne klares Ziel. Wir definieren erst den ROI, dann die technische Lösung.</p>
-              </div>
-              <div>
-                <h4 className="font-bold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text-heading)' }}>
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20">
-                    <Terminal className="w-4 h-4" />
-                  </div>
-                  Execution
-                </h4>
-                <p className="text-sm opacity-70">Sauberer, skalierbarer Code und Design auf Weltklasse-Niveau für maximale Sicherheit.</p>
-              </div>
+          <h3 className="text-4xl font-bold mb-6" style={{ color: 'var(--color-text-heading)' }}>Smarter arbeiten – mit Lösungen, die zu deinem Alltag passen.</h3>
+          <p className="mb-5 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+            Ich helfe Unternehmen dabei, smarter zu arbeiten – durch digitale Lösungen, die wirklich zu ihrem Alltag passen. Durch meine Arbeit in HR und im Mittelstand weiß ich: Der größte Hebel für Wachstum liegt oft nicht im Produkt, sondern in den Abläufen dahinter.
+          </p>
+          <p className="mb-5 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+            Genau dort setze ich an – mit Websites, AI-Assistenten und digitalen Workflows, die Prozesse schlanker, schneller und skalierbarer machen.
+          </p>
+          <p className="mb-8 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+            Ich entwickle keine Lösungen von der Stange, sondern verstehe erst dein Business und baue dann das, was wirklich gebraucht wird.
+          </p>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <Zap className="w-4 h-4 text-emerald-500" /> Aus der Praxis
+              </h4>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Lösungen, die aus echtem Verständnis für Geschäftsprozesse entstehen.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-2 flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-emerald-500" /> Maßgeschneidert
+              </h4>
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Kein Standard – sondern genau das, was dein Business braucht.</p>
             </div>
           </div>
         </div>
@@ -1032,11 +943,11 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-24 md:py-32">
+    <section id="testimonials" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Social Proof</h2>
-          <h3 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: 'var(--color-text-heading)' }}>Messbare Erfolge & <span className="text-gradient">Vertrauen</span>.</h3>
+          <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Kundenstimmen</h2>
+          <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Was meine Kunden sagen</h3>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((t, idx) => (
@@ -1100,7 +1011,7 @@ const BlogPreview = ({ onNavigate }: { onNavigate: (hash: string) => void }) => 
   const latestPosts = blogPosts.slice(0, 3);
 
   return (
-    <section className="py-24 md:py-32" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+    <section className="py-16 md:py-24" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-end justify-between mb-16">
           <div>
