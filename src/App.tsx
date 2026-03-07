@@ -524,15 +524,40 @@ const Contact = () => {
   const [formState, setFormState] = useState<"idle" | "sending" | "sent">("idle");
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState("sending");
-    // Simulate send – replace with real API call
-    setTimeout(() => {
-      setFormState("sent");
-      setFormData({ name: "", email: "", message: "" });
-      setTimeout(() => setFormState("idle"), 4000);
-    }, 1500);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "083296ac-5a02-4217-bc22-b5e14d18fa79", // Public access key (free tier)
+          from_name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: "Neue Kontaktanfrage von rheindorf.digital",
+          replyto: formData.email
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setFormState("sent");
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setFormState("idle"), 4000);
+      } else {
+        throw new Error(result.message || "Failed to send");
+      }
+    } catch (error) {
+      console.error("Email send error:", error);
+      alert("Es gab ein Problem beim Senden der Nachricht. Bitte versuche es später noch einmal oder schreibe direkt an hello@rheindorf.digital.");
+      setFormState("idle");
+    }
   };
 
   return (
