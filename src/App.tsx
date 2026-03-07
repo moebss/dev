@@ -485,7 +485,11 @@ const WorkflowsPreview = () => {
               desc: "Infoportal & Newsletter.",
               img: `${import.meta.env.BASE_URL}buergerbrief.png`
             },
-            { title: "Projekt folgt", desc: "Mehr Infos in Kürze." },
+            {
+              title: "KryptoKölsch",
+              desc: "Blockchain Community Rheinland.",
+              img: `${import.meta.env.BASE_URL}kryptokoelsch.png`
+            },
           ].map((project, idx) => (
             <motion.div
               key={idx}
