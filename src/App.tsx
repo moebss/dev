@@ -6,6 +6,7 @@ import { Impressum } from "./Impressum";
 import { Datenschutz } from "./Datenschutz";
 import { ProjectsPage, workflows } from "./ProjectsPage";
 import { WebsitesPage } from "./WebsitesPage";
+import { AutomationFlow } from "./components/AutomationFlow";
 
 const Navbar = ({ onNavigate, isDark, onToggleTheme }: { onNavigate: (hash: string) => void; isDark: boolean; onToggleTheme: () => void }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -418,50 +419,31 @@ const Services = () => {
 };
 
 const WorkflowsPreview = () => {
-  // Pick 3 random workflows from the full list
-  const [randomWorkflows] = useState(() => {
-    const shuffled = [...workflows].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 3);
-  });
-
   return (
     <section id="projects" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Workflows Section */}
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-sm font-mono text-emerald-500 uppercase tracking-widest mb-4">Portfolio</h2>
-            <h3 className="text-4xl font-bold" style={{ color: 'var(--color-text-heading)' }}>Workflows</h3>
+            <h3 className="text-4xl font-bold mb-4" style={{ color: 'var(--color-text-heading)' }}>Smarte Workflows</h3>
+            <p className="max-w-xl text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+              Ich automatisiere repetitive Aufgaben mit KI, damit du dich auf das Wesentliche konzentrieren kannst. Hier sind drei Beispiele für Live-Systeme:
+            </p>
           </div>
-          <button onClick={() => window.location.hash = "#/projects"} className="hidden md:flex items-center gap-2 hover:text-emerald-500 transition-colors" style={{ color: 'var(--color-text-secondary)' }}>
+          <button onClick={() => window.location.hash = "#/projects"} className="flex items-center gap-2 hover:text-emerald-500 transition-colors whitespace-nowrap" style={{ color: 'var(--color-text-secondary)' }}>
             Alle Workflows <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {randomWorkflows.map((wf, idx) => {
-            const IconComponent = wf.icon;
-            return (
-              <motion.div
-                key={wf.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                onClick={() => window.location.hash = "#/projects"}
-                className="group cursor-pointer p-6 rounded-2xl border hover:border-emerald-500/50 transition-all" style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
-              >
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 transition-transform">
-                  <IconComponent className="w-6 h-6" />
-                </div>
-                <p className="text-xs font-mono text-emerald-500 mb-2">
-                  {wf.categories[0]}
-                </p>
-                <h4 className="text-xl font-bold group-hover:text-emerald-400 transition-colors mb-2">{wf.name}</h4>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{wf.description}</p>
-              </motion.div>
-            );
-          })}
-        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-24"
+        >
+          <AutomationFlow />
+        </motion.div>
 
         {/* Web Development Section */}
         <div className="flex items-end justify-between mb-16 mt-24">
