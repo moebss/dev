@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+
+  /* Colors: Tech Obsidian / Deep Navy / Emerald Accent */
+  --color-brand-bg: #0b0f19;
+  --color-brand-surface: #10172a;
+  --color-brand-card: #151f38;
+  --color-brand-border: #1e293b;
+  --color-accent-emerald: #10b981;
+  --color-accent-cyan: #06b6d4;
+
+  /* Fluid Typography */
+  --text-h1: clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
+  --text-h2: clamp(2rem, 1.6rem + 1.8vw, 3.25rem);
+  --text-h3: clamp(1.5rem, 1.3rem + 1vw, 2.25rem);
+
+  /* WebGradients & Ambient Glows */
+  --gradient-hero-glow: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+  --gradient-glass-border: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
+  --gradient-emerald-cyan: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+}
+
+/* Custom Base Utilities */
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
