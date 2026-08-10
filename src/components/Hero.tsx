@@ -1,5 +1,6 @@
-import { Star, CheckCircle2, ShieldCheck, ArrowRight, Bot, Sparkles } from 'lucide-react';
-import heroImg from '../images/hero.jpg';
+import { Star, CheckCircle2, ShieldCheck, ArrowRight, Bot, Sparkles, Code2, Zap } from 'lucide-react';
+import alexanderHeroImg from '../images/itsme.png';
+import alexanderProfileImg from '../images/profile.jpg';
 
 interface HeroProps {
   onOpenContact: () => void;
@@ -17,23 +18,30 @@ export default function Hero({ onOpenContact }: HeroProps) {
         {/* Left 50% Content */}
         <div className="w-full lg:w-1/2 px-4 sm:px-6 lg:px-8 py-12 lg:py-20 flex flex-col justify-center">
           
-          {/* Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 bg-slate-900/90 border border-emerald-500/30 px-3.5 py-1.5 rounded-full shadow-sm w-fit mb-6">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-              Webdesign & KI-Partner für Köln & NRW
-            </span>
+          {/* Personal Founder Eyebrow Badge */}
+          <div className="inline-flex items-center gap-3 bg-slate-900/90 border border-emerald-500/40 px-4 py-1.5 rounded-full shadow-sm w-fit mb-6">
+            <img 
+              src={alexanderProfileImg} 
+              alt="Alexander Rheindorf Gründer & Entwickler" 
+              className="w-7 h-7 rounded-full object-cover border border-emerald-400"
+            />
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs font-bold text-emerald-400 tracking-wider">
+                Alexander Rheindorf • Webdesign & KI-Automationen Köln/NRW
+              </span>
+            </div>
           </div>
 
           {/* Headline */}
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white text-balance leading-[1.1] mb-6">
-            High-End Websites & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">KI-Automationen</span>.
+            High-End Websites & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">KI-Automationen</span>.
           </h1>
 
           {/* Subline */}
           <p className="text-base sm:text-lg text-slate-300 text-pretty mb-8 max-w-xl font-normal leading-relaxed">
-            Ich baue kaufstarke Websites und 24/7 KI-Telefonassistenten für Handwerker, Friseure, Tattoostudios, SHK & lokale Betriebe in Köln & NRW. 
-            <strong className="text-white font-semibold"> Kein teurer Agentur-Overhead – direkt, schnell, messbare Ergebnisse.</strong>
+            Ich bin <strong className="text-white font-semibold">Alexander Rheindorf</strong>. Ich entwickle kaufstarke Websites und 24/7 KI-Telefonassistenten für Handwerker, Friseure, Shisha-Shops & lokale Betriebe in Köln & NRW. 
+            <strong className="text-emerald-400 font-semibold block mt-1"> Kein teurer Agentur-Overhead – direkt, persönlich, messbare Ergebnisse.</strong>
           </p>
 
           {/* Primary CTA + Rechner Button */}
@@ -73,24 +81,28 @@ export default function Hero({ onOpenContact }: HeroProps) {
 
         </div>
 
-        {/* Right 50% Edge-to-Edge Image with Glassmorphism Overlay */}
-        <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-full">
-          <img
-            src={heroImg}
-            alt="Rheindorf Digital Entwickler-Arbeitsplatz mit KI-Automationen"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+        {/* Right 50% Edge-to-Edge Image with Alexander's Real Personal Portrait */}
+        <div className="w-full lg:w-1/2 relative min-h-[450px] lg:min-h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-[#0f172a] to-slate-950">
+          
+          <div className="relative z-10 w-full h-full flex items-center justify-center p-6">
+            <img
+              src={alexanderHeroImg}
+              alt="Alexander Rheindorf Gründer Rheindorf Digital"
+              className="max-h-[600px] w-auto object-contain filter drop-shadow-[0_20px_50px_rgba(16,185,129,0.3)] transition-transform duration-700 hover:scale-105"
+            />
+          </div>
+
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent lg:hidden" />
 
-          {/* Floating Glassmorphism Badge */}
-          <div className="absolute bottom-8 left-8 right-8 lg:left-auto lg:right-8 lg:max-w-xs bg-slate-950/90 backdrop-blur-md p-4 rounded-xl border border-emerald-500/30 shadow-2xl">
+          {/* Floating Glassmorphism Founder Badge */}
+          <div className="absolute bottom-8 left-8 right-8 lg:left-auto lg:right-8 lg:max-w-xs bg-slate-950/90 backdrop-blur-md p-4 rounded-2xl border border-emerald-500/40 shadow-2xl z-20">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg border border-emerald-500/40">
-                <Bot className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg border border-emerald-500/40 shrink-0">
+                <Code2 className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-white uppercase tracking-wider">KI-Telefonassistent</p>
-                <p className="text-xs text-slate-300 mt-0.5">24/7 Terminbuchung & Fragenbeantwortung ohne Ausfallzeit</p>
+                <p className="text-xs font-bold text-white uppercase tracking-wider">Alexander Rheindorf</p>
+                <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">Persönlicher Ansprechpartner & Entwickler</p>
               </div>
             </div>
           </div>
@@ -98,6 +110,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
         </div>
 
       </div>
+
     </section>
   );
 }
