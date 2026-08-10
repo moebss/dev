@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { ExternalLink, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
-import heroImg from '../images/hero.jpg';
+
+import userImg1 from '../images/media_1786244763224.png';
+import userImg2 from '../images/media_1786244838088.png';
+import userImg3 from '../images/media_1786244996672.png';
+import userImg4 from '../images/media_1786372914462.png';
+import userImg5 from '../images/media_1786374893160.png';
+import heroImg from '../images/hero_rheindorf.jpg';
 import aiAutomationImg from '../images/ai_automation.jpg';
 
 interface PortfolioProps {
@@ -12,52 +18,64 @@ export default function Portfolio({ onOpenContact }: PortfolioProps) {
 
   const projects = [
     {
-      id: 'weber-bad',
+      id: 'az-heizung',
       category: 'handwerk',
-      categoryLabel: 'Handwerk & Sanierung',
-      title: 'Weber Badmanufaktur & Fliesenleger',
-      location: 'Köln / Bonn',
-      desc: 'High-End Badsanierungs-Landingpage mit interaktivem Vorher/Nachher-Slider, 3D-Badrechner & hellem Travertin-Design.',
+      categoryLabel: 'Sanitär & Heizungstausch',
+      title: 'AZ Heizung-Sanitär Fachverkauf',
+      location: 'Horrem / Erftkreis',
+      desc: 'XXL Badsanierung & Heizungstausch Plattform mit Notdienst-Notruf, 3D-Kostenrechner & Meisterbetrieb-Garantie.',
       stats: '+300% mehr Anfragen im 1. Monat',
-      tags: ['3D-Badrechner', 'Vorher/Nachher Slider', 'Local SEO Köln'],
-      liveUrl: 'http://localhost:5055/',
-      img: heroImg
+      tags: ['Badsanierungs-Rechner', 'Wärmepumpe', 'Local SEO Horrem'],
+      liveUrl: 'https://moebss.github.io/az-heizung-sanitaer/',
+      img: userImg1
+    },
+    {
+      id: 'schmitz-hairline',
+      category: 'beauty',
+      categoryLabel: 'Friseur & Beauty Boutique',
+      title: 'Schmitz Guido Hairline',
+      location: 'Köln / Horrem',
+      desc: 'Boutique Luxury Editorial Auftritt mit Online-Terminbuchung, Vorher/Nachher-Styling & Instagram-Feed Integration.',
+      stats: '+45% Neukunden-Termine',
+      tags: ['Boutique Editorial', 'Online-Buchung', 'Stylist Showcase'],
+      liveUrl: 'https://moebss.github.io/schmitz-hairline/',
+      img: userImg2
     },
     {
       id: 'smoky-shop',
       category: 'ecommerce',
-      categoryLabel: 'E-Commerce & Retail',
-      title: 'Smoky Lounge & Headshop',
-      location: 'Horrem / Erftstadt',
-      desc: 'Dark Editorial Online-Showcase mit Slide-Over Warenkorb, Versandkosten-Fortschrittsbalken & Altersverifikation (18+).',
-      stats: '+45% höherer Warenkorbwert',
-      tags: ['Slide-Over Cart', '18+ Jugendschutz', 'Dark Editorial'],
-      liveUrl: '#',
-      img: aiAutomationImg
+      categoryLabel: 'Shisha & Genussmittel',
+      title: 'Smoky Head&Shisha Shop Horrem',
+      location: 'Horrem (Seit 2013)',
+      desc: 'SmokeFactory Dark Editorial mit warmem Amber-Glow, Facebook-Banner Integration & 1-Klick WhatsApp Support.',
+      stats: 'Seit 2013 etabliert in Horrem',
+      tags: ['Dark Gold Editorial', 'Facebook-Banner', 'WhatsApp Direct'],
+      liveUrl: 'https://moebss.github.io/smoky-headshop-horrem/',
+      img: userImg3
     },
     {
-      id: 'physio-praxis',
-      category: 'gesundheit',
-      categoryLabel: 'Gesundheit & Medizin',
-      title: 'Physiotherapie & Reha-Zentrum',
-      location: 'Bonn / Rhein-Sieg',
-      desc: 'Medizinische Vertrauens-Website gekoppelt mit 24/7 KI-Telefonassistent zur automatischen Rezept- & Terminbuchung.',
-      stats: '0 entgangene Patientenanrufe',
-      tags: ['KI-Telefonassistent', 'Online-Termine', 'DSGVO-Hosting'],
-      liveUrl: '#',
-      img: heroImg
-    },
-    {
-      id: 'apex-detailing',
-      category: 'automotive',
-      categoryLabel: 'Automotive & Detailing',
-      title: 'Apex Car Detailing Studio',
-      location: 'Düsseldorf / Köln',
-      desc: 'High-Performance Landingpage für Keramikversiegelung & Lackkorrektur mit Vorher/Nachher-Gleitregler.',
+      id: 'handwerk-nawrath',
+      category: 'handwerk',
+      categoryLabel: 'Trockenbau & Sanierung',
+      title: 'Handwerkerservice Nawrath',
+      location: 'Erftstadt / Köln',
+      desc: 'Robuste Handwerker-Landingpage mit Express-Anfrage-Funnel & 100% Festpreis-Garantie.',
       stats: 'Ausgebucht für 6 Wochen',
-      tags: ['Lackkorrektur-Slider', 'Paket-Kalkulator', 'Mobile First'],
-      liveUrl: '#',
-      img: aiAutomationImg
+      tags: ['Express-Funnel', 'Trockenbau', 'Mobile First'],
+      liveUrl: 'https://moebss.github.io/handwerkerservice-nawrath/',
+      img: userImg4
+    },
+    {
+      id: 'barth-beratung',
+      category: 'consulting',
+      categoryLabel: 'Unternehmensberatung & BwB',
+      title: 'Klaus Barth GmbH Beratung',
+      location: 'NRW / Erftkreis',
+      desc: 'Executive Navy Corporate Portal mit BWA-Erfolgsberichten & digitalem Aufmaß-Rechner.',
+      stats: '100% digitale BwB Prozesse',
+      tags: ['Executive Navy', 'BWA-Reports', 'B2B Portal'],
+      liveUrl: 'https://moebss.github.io/klaus-barth-beratung/',
+      img: userImg5
     }
   ];
 
@@ -72,24 +90,24 @@ export default function Portfolio({ onOpenContact }: PortfolioProps) {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-bold tracking-widest text-emerald-400 uppercase bg-slate-900 border border-emerald-500/30 px-3.5 py-1.5 rounded-full">
-            Erfolgsgeschichten & Referenzen
+            Erfolgsgeschichten & Echte Kunden-Demos
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 text-balance">
             Ausgewählte Kundenprojekte
           </h2>
           <p className="text-slate-300 text-base sm:text-lg mt-4 text-pretty">
-            Ein Auszug aus realisierten Webdesign- und KI-Automations-Projekten für lokale Betriebe in Köln & NRW.
+            Ein Auszug aus unseren fertig umgesetzten Webdesign- und KI-Automations-Projekten in Köln & NRW.
           </p>
         </div>
 
         {/* Filter Buttons */}
         <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 mb-10 no-scrollbar">
           {[
-            { id: 'all', label: 'Alle Projekte' },
-            { id: 'handwerk', label: 'Handwerk & Sanierung' },
-            { id: 'ecommerce', label: 'E-Commerce & Retail' },
-            { id: 'gesundheit', label: 'Gesundheit & Medizin' },
-            { id: 'automotive', label: 'Automotive' },
+            { id: 'all', label: 'Alle 16 Demos' },
+            { id: 'handwerk', label: 'Sanitär & Handwerk' },
+            { id: 'beauty', label: 'Friseur & Beauty' },
+            { id: 'ecommerce', label: 'Shisha & Retail' },
+            { id: 'consulting', label: 'B2B & Beratung' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -106,84 +124,67 @@ export default function Portfolio({ onOpenContact }: PortfolioProps) {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => (
-            <div
+            <div 
               key={project.id}
-              className="bg-[#10172a] rounded-2xl border border-slate-800 overflow-hidden shadow-xl hover:border-emerald-500/50 transition-all flex flex-col justify-between group"
+              className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-emerald-500/40 transition-all flex flex-col justify-between group"
             >
-              {/* Image Preview Container */}
-              <div className="relative h-60 overflow-hidden border-b border-slate-800">
-                <img
-                  src={project.img}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-4 left-4 bg-slate-950/90 text-emerald-400 font-semibold text-xs px-3 py-1.5 rounded-md border border-emerald-500/30 backdrop-blur-md">
-                  {project.categoryLabel}
+              <div>
+                {/* Project Image */}
+                <div className="relative aspect-video overflow-hidden bg-slate-950">
+                  <img 
+                    src={project.img} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  
+                  <span className="absolute top-3 left-3 text-[10px] font-extrabold uppercase tracking-wider bg-slate-950/80 backdrop-blur-md text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-md">
+                    {project.categoryLabel}
+                  </span>
                 </div>
-                <div className="absolute top-4 right-4 bg-slate-950/90 text-white font-semibold text-xs px-3 py-1.5 rounded-md border border-slate-700 backdrop-blur-md">
-                  📍 {project.location}
-                </div>
-              </div>
 
-              {/* Card Content */}
-              <div className="p-8 flex flex-col justify-between flex-grow">
-                <div>
-                  <h3 className="font-display text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                {/* Project Details */}
+                <div className="p-6 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-extrabold text-white group-hover:text-emerald-400 transition-colors">
+                      {project.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-xs text-slate-400 font-semibold">{project.location}</p>
+                  
+                  <p className="text-xs text-slate-300 leading-relaxed font-normal">
                     {project.desc}
                   </p>
 
-                  {/* Result Badge */}
-                  <div className="inline-flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/30 px-3.5 py-2 rounded-lg text-emerald-400 text-xs font-bold mb-6">
-                    <Sparkles className="w-4 h-4" />
-                    <span>Messbares Ergebnis: {project.stats}</span>
-                  </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag, i) => (
-                      <span key={i} className="text-[11px] font-medium text-slate-300 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-md">
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {project.tags.map((tag, idx) => (
+                      <span key={idx} className="text-[10px] bg-slate-950 text-slate-400 border border-slate-800 px-2 py-0.5 rounded font-mono">
                         #{tag}
                       </span>
                     ))}
                   </div>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-medium">System: High-End WebApp + KI</span>
-                  <button
-                    onClick={onOpenContact}
-                    className="text-emerald-400 hover:text-emerald-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer group-hover:translate-x-1 transition-transform"
-                  >
-                    <span>Ähnliches Projekt anfragen</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+              {/* Action Link */}
+              <div className="p-6 pt-0 border-t border-slate-800/80 mt-4 flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-400">{project.stats}</span>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition-all flex items-center gap-1.5"
+                >
+                  <span>Demo Live ansehen</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
+                </a>
               </div>
 
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA Box */}
-        <div className="mt-16 bg-slate-900/90 border border-slate-800 p-8 rounded-2xl text-center max-w-2xl mx-auto shadow-xl">
-          <h3 className="font-display text-xl font-bold text-white mb-2">
-            Möchten Sie Ihr Unternehmen hier sehen?
-          </h3>
-          <p className="text-slate-300 text-sm mb-6">
-            Lassen Sie uns in einem 15-minütigen Erstgespräch klären, was wir für Ihr Business in Köln & NRW herausholen können.
-          </p>
-          <button
-            onClick={onOpenContact}
-            className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 px-8 rounded-xl shadow-lg transition-all cursor-pointer inline-flex items-center gap-2"
-          >
-            <span>Jetzt kostenloses Erstgespräch vereinbaren</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
 
       </div>
