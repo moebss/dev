@@ -1,5 +1,7 @@
 import { Star, CheckCircle2, ShieldCheck, ArrowRight, Bot, Sparkles, Code2, Zap } from 'lucide-react';
-import alexanderHeroImg from '../images/itsme.png';
+
+import alexanderBackHeroImg from '../images/hero.jpg';
+import alexanderBackNoBgImg from '../images/hero-neu-bg.png';
 import alexanderProfileImg from '../images/profile.jpg';
 
 interface HeroProps {
@@ -81,18 +83,17 @@ export default function Hero({ onOpenContact }: HeroProps) {
 
         </div>
 
-        {/* Right 50% Edge-to-Edge Image with Alexander's Real Personal Portrait */}
-        <div className="w-full lg:w-1/2 relative min-h-[450px] lg:min-h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-[#0f172a] to-slate-950">
+        {/* Right 50% Edge-to-Edge Image with Alexander's Back Developer Photo */}
+        <div className="w-full lg:w-1/2 relative min-h-[450px] lg:min-h-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-[#0f172a] to-slate-950 overflow-hidden">
           
-          <div className="relative z-10 w-full h-full flex items-center justify-center p-6">
-            <img
-              src={alexanderHeroImg}
-              alt="Alexander Rheindorf Gründer Rheindorf Digital"
-              className="max-h-[600px] w-auto object-contain filter drop-shadow-[0_20px_50px_rgba(16,185,129,0.3)] transition-transform duration-700 hover:scale-105"
-            />
-          </div>
+          <img
+            src={alexanderBackHeroImg}
+            alt="Alexander Rheindorf Entwickler bei der Arbeit"
+            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105 opacity-90"
+          />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-transparent to-transparent lg:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-slate-950/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f19]/80 via-transparent to-transparent hidden lg:block" />
 
           {/* Floating Glassmorphism Founder Badge */}
           <div className="absolute bottom-8 left-8 right-8 lg:left-auto lg:right-8 lg:max-w-xs bg-slate-950/90 backdrop-blur-md p-4 rounded-2xl border border-emerald-500/40 shadow-2xl z-20">
@@ -102,7 +103,7 @@ export default function Hero({ onOpenContact }: HeroProps) {
               </div>
               <div>
                 <p className="text-xs font-bold text-white uppercase tracking-wider">Alexander Rheindorf</p>
-                <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">Persönlicher Ansprechpartner & Entwickler</p>
+                <p className="text-[11px] text-emerald-400 font-semibold mt-0.5">Persönlicher Entwickler & Ansprechpartner</p>
               </div>
             </div>
           </div>
