@@ -1,19 +1,25 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Send, CheckCircle2, Bot, Sparkles, MessageSquare, Clock, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle2, Bot, Sparkles, MessageSquare, Clock, ShieldCheck, Lock } from 'lucide-react';
 import alexanderProfileImg from '../images/profile.jpg';
 
-export default function Contact() {
+interface ContactProps {
+  onOpenDatenschutz?: () => void;
+}
+
+export default function Contact({ onOpenDatenschutz }: ContactProps) {
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [interest, setInterest] = useState('webdesign');
   const [message, setMessage] = useState('');
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(true);
   const [honeypot, setHoneypot] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (honeypot) return;
+    if (!acceptedPrivacy) return;
     setSubmitted(true);
   };
 
@@ -232,6 +238,29 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* DSGVO Consent Checkbox */}
+                <div className="flex items-start gap-2.5 pt-1">
+                  <input
+                    type="checkbox"
+                    id="privacy-check"
+                    required
+                    checked={acceptedPrivacy}
+                    onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                    className="mt-1 w-4 h-4 rounded border-slate-700 bg-[#080c14] text-emerald-500 focus:ring-emerald-500 cursor-pointer accent-emerald-500"
+                  />
+                  <label htmlFor="privacy-check" className="text-xs text-slate-400 leading-relaxed cursor-pointer select-none">
+                    Ich willige ein, dass meine Angaben zur Kontaktaufnahme und Bearbeitung der Anfrage gemäß der{' '}
+                    <button
+                      type="button"
+                      onClick={onOpenDatenschutz}
+                      className="text-emerald-400 underline hover:text-emerald-300 inline cursor-pointer"
+                    >
+                      Datenschutzerklärung
+                    </button>{' '}
+                    verarbeitet werden. Diese Einwilligung kann ich jederzeit widerrufen.
+                  </label>
+                </div>
+
                 {/* Submit Button */}
                 <button
                   type="submit"
@@ -241,8 +270,9 @@ export default function Contact() {
                   <span>Kostenloses Erstgespräch anfragen</span>
                 </button>
 
-                <p className="text-[11px] text-slate-500 text-center">
-                  100% unverbindlich • Keine Weitergabe deiner Daten • Antwort innerhalb 24h
+                <p className="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>100% unverbindlich • DSGVO-konform • Antwort innerhalb 24h</span>
                 </p>
 
               </form>

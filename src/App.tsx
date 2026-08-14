@@ -71,8 +71,8 @@ export default function App() {
         {/* 13. FAQ Sektion */}
         <FAQ />
 
-        {/* 14. Direct High-Converting Contact */}
-        <Contact />
+        {/* 14. Direct High-Converting Contact with DSGVO Trigger */}
+        <Contact onOpenDatenschutz={() => setLegalModal('datenschutz')} />
       </main>
 
       {/* 15. Structured 4-Column Footer */}
