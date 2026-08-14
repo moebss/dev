@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/rheindorf-digital/',
+  base: './',
   server: {
     port: 9099,
     host: true
