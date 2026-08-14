@@ -3,21 +3,19 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TrustStrip from './components/TrustStrip';
 import Portfolio from './components/Portfolio';
-import BeforeAfterSlider from './components/BeforeAfterSlider';
 import BentoGrid from './components/BentoGrid';
-import CostEstimator from './components/CostEstimator';
 import ServiceTabs from './components/ServiceTabs';
+import BeforeAfterSlider from './components/BeforeAfterSlider';
+import CostEstimator from './components/CostEstimator';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import StickyCTA from './components/StickyCTA';
-import ImpressumModal from './components/ImpressumModal';
-import DatenschutzModal from './components/DatenschutzModal';
+import LegalModals from './components/LegalModals';
 
 export default function App() {
-  const [impressumOpen, setImpressumOpen] = useState(false);
-  const [datenschutzOpen, setDatenschutzOpen] = useState(false);
+  const [legalModal, setLegalModal] = useState<'impressum' | 'datenschutz' | null>(null);
 
   const scrollToContact = () => {
     const el = document.getElementById('kontakt');
@@ -27,56 +25,55 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-[#080c14] text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950 pb-16 sm:pb-0 overflow-x-hidden">
       
       {/* 1. Header Navbar */}
       <Navbar onOpenContact={scrollToContact} />
 
       {/* Main Content Sections */}
       <main className="flex-grow">
-        {/* 2. Hero Section (50/50 Edge-to-Edge) */}
+        {/* 2. Hero Section (100vh Atmospheric Cinematic Canvas) */}
         <Hero onOpenContact={scrollToContact} />
 
-        {/* 3. Trust Strip */}
+        {/* 3. Tech & Trust Strip */}
         <TrustStrip />
 
-        {/* 4. Portfolio / Case Studies Showcase */}
+        {/* 4. Live Portfolio Showcase (Alyas Barbershop, Burning Bandit, Nails Shop, AZ Heizung) */}
         <Portfolio onOpenContact={scrollToContact} />
 
-        {/* 5. Webflow Feature 1: Vorher / Nachher Slider */}
-        <BeforeAfterSlider />
-
-        {/* 5. Webflow Feature 2: Bento Grid Layout */}
+        {/* 5. Bento Grid: Why Rheindorf Digital & 24/7 KI Voice Assistant */}
         <BentoGrid />
 
-        {/* 6. Webflow Feature 3: Interaktiver Projekt-Rechner */}
-        <CostEstimator onOpenContact={scrollToContact} />
-
-        {/* 7. Webflow Feature 4: Dynamic Service Tabs */}
+        {/* 6. Service Packages & Transparent Pricing */}
         <ServiceTabs onOpenContact={scrollToContact} />
 
-        {/* 8. Testimonials & Google Reviews */}
+        {/* 7. Interactive Before/After Transformation Slider */}
+        <BeforeAfterSlider />
+
+        {/* 8. Interactive Project & Budget Estimator */}
+        <CostEstimator onOpenContact={scrollToContact} />
+
+        {/* 9. Local Business Testimonials & Social Proof */}
         <Testimonials />
 
-        {/* 9. FAQ Sektion */}
+        {/* 10. FAQ Sektion */}
         <FAQ />
 
-        {/* 10. Direct Contact Form */}
+        {/* 11. Direct High-Converting Contact */}
         <Contact />
       </main>
 
-      {/* 11. Structured 4-Column Footer */}
+      {/* 12. Structured 4-Column Footer */}
       <Footer
-        onOpenImpressum={() => setImpressumOpen(true)}
-        onOpenDatenschutz={() => setDatenschutzOpen(true)}
+        onOpenImpressum={() => setLegalModal('impressum')}
+        onOpenDatenschutz={() => setLegalModal('datenschutz')}
       />
 
-      {/* 12. Mobile Sticky Action Bar */}
+      {/* 13. Mobile Sticky Action Bar */}
       <StickyCTA onOpenContact={scrollToContact} />
 
-      {/* Modals */}
-      <ImpressumModal isOpen={impressumOpen} onClose={() => setImpressumOpen(false)} />
-      <DatenschutzModal isOpen={datenschutzOpen} onClose={() => setDatenschutzOpen(false)} />
+      {/* Legal Modals (§ 5 DDG & DSGVO) */}
+      <LegalModals type={legalModal} onClose={() => setLegalModal(null)} />
 
     </div>
   );

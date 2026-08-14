@@ -1,79 +1,79 @@
-import { Star, Quote, CheckCircle2 } from 'lucide-react';
+import { Star, Quote, CheckCircle2, Building2 } from 'lucide-react';
 
 export default function Testimonials() {
   const reviews = [
     {
-      name: 'Michael Weber',
-      location: 'Weber Badmanufaktur, Köln',
-      project: 'Badsanierungs-Landingpage & 3D-Rechner',
-      date: 'Google Bewertung',
-      text: 'Super unkomplizierte Zusammenarbeit. Innerhalb von 12 Tagen stand unsere neue Website inklusive interaktivem Bad-Rechner. Wir haben im ersten Monat bereits 8 qualifizierte Anfragen generiert!'
+      name: 'Marco & Elena',
+      role: 'Inhaber, The Burning Bandit Kerpen',
+      text: 'Alexander hat unser Tattoo-Studio online komplett neu aufgestellt. Der Cover-Up Slider und der Style-Rechner bringen uns wöchentlich messbar mehr Terminanfragen von echten Tattoo-Liebhabern.',
+      rating: 5,
+      branch: 'Tattoo & Fine Art'
     },
     {
-      name: 'Stefan Krahn',
-      location: 'SHK Meisterbetrieb, Kerpen',
-      project: 'Website Relaunch & KI-Telefonassistent',
-      date: 'Google Bewertung',
-      text: 'Der KI-Telefonassistent ist der absolute Wahnsinn. Wenn wir auf der Baustelle sind, nimmt die KI alle Anrufe entgegen und bucht Beratungstermine direkt in unseren Kalender. Kein entgangener Anruf mehr.'
+      name: 'Alyas',
+      role: 'Inhaber, Alyas Barbershop Horrem',
+      text: 'Die Seite sieht extrem stark aus und lädt blitzschnell auf jedem Handy. Unsere Kunden loben die einfache Online-Terminanfrage und das moderne Gentleman-Design.',
+      rating: 5,
+      branch: 'Gentlemen\'s Barbershop'
     },
     {
-      name: 'Alexander Lindner',
-      location: 'Tattoo & Piercing Studio, Bonn',
-      project: 'Showcase Website & Vorher/Nachher Slider',
-      date: 'Google Bewertung',
-      text: 'Endlich eine Website, die nicht wie ein langweiliges Template aussieht. Das Design passt zu 100% zu unserem Studio und die Buchungen laufen vollautomatisch.'
+      name: 'Mai & Team',
+      role: 'Geschäftsleitung, The Nails Shop Horrem',
+      text: 'Der Live-Instagram-Feed und das warme, elegante Farbkonzept passen perfekt zu unserem Salon. Die Zusammenarbeit mit Alexander war schnell, unkompliziert und absolut verlässlich.',
+      rating: 5,
+      branch: 'Boutique Nagelstudio'
     }
   ];
 
   return (
-    <section id="bewertungen" className="py-20 bg-[#0b0f19] border-b border-slate-800">
+    <section id="kundenstimmen" className="py-24 bg-[#080c14] border-b border-[#1e2c4a]/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm mb-4">
-            <div className="flex text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              ))}
-            </div>
-            <span className="text-xs font-bold text-slate-200">5.0 Sterne Kundenbewertungen</span>
-          </div>
-
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-balance">
-            Ergebnisse für lokale Betriebe in Köln & NRW
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span className="text-xs font-semibold tracking-widest text-emerald-400 uppercase bg-[#0e1626] border border-emerald-500/30 px-3.5 py-1.5 rounded-full inline-block">
+            Erfahrungen & Feedback
+          </span>
+          <h2 className="font-outfit text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+            Was lokale Inhaber über die <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              Zusammenarbeit
+            </span> sagen.
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg mt-3 text-pretty">
-            Echte Erfahrungen von Handwerkern, Dienstleistern & Unternehmern aus der Region.
+          <p className="text-slate-300 text-base sm:text-lg font-normal">
+            Echte Bewertungen von Betrieben, die mit Rheindorf Digital online messbar gewachsen sind.
           </p>
         </div>
 
+        {/* Reviews Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map((r, idx) => (
+          {reviews.map((rev, idx) => (
             <div
               key={idx}
-              className="bg-[#10172a] rounded-2xl p-8 border border-slate-800 shadow-md flex flex-col justify-between hover:border-emerald-500/50 transition-all relative"
+              className="bg-[#0e1626] border border-[#1e2c4a] p-8 rounded-3xl shadow-xl flex flex-col justify-between hover:border-emerald-500/40 transition-all duration-300 space-y-6"
             >
-              <Quote className="w-10 h-10 text-emerald-500/10 absolute top-6 right-6 pointer-events-none" />
-
-              <div>
-                <div className="flex text-amber-400 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+              <div className="space-y-4">
+                {/* Rating Stars */}
+                <div className="flex items-center gap-1 text-amber-400">
+                  {[...Array(rev.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400" />
                   ))}
                 </div>
 
-                <p className="text-slate-200 text-sm leading-relaxed italic mb-6">
-                  "{r.text}"
+                <p className="text-slate-200 text-sm leading-relaxed italic">
+                  „{rev.text}“
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-800">
-                <h4 className="font-bold text-white text-base flex items-center gap-2">
-                  <span>{r.name}</span>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                </h4>
-                <p className="text-xs text-emerald-400 font-semibold">{r.location}</p>
-                <p className="text-[11px] text-slate-400 mt-1">{r.project}</p>
+              <div className="pt-6 border-t border-[#1e2c4a] flex items-center justify-between">
+                <div>
+                  <h4 className="font-outfit font-bold text-white text-base">{rev.name}</h4>
+                  <span className="text-xs text-slate-400 block">{rev.role}</span>
+                </div>
+
+                <span className="text-[10px] bg-[#131d33] text-emerald-400 border border-[#1e2c4a] px-2.5 py-1 rounded-full font-semibold">
+                  {rev.branch}
+                </span>
               </div>
             </div>
           ))}

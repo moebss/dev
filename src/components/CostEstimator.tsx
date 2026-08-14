@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, CheckCircle2, ArrowRight, Sparkles, Phone, Mail, User } from 'lucide-react';
+import { Calculator, CheckCircle2, ArrowRight, Sparkles, Phone, Mail, User, ShieldCheck, MessageSquare } from 'lucide-react';
 
 interface CostEstimatorProps {
   onOpenContact: () => void;
@@ -35,252 +35,312 @@ export default function CostEstimator({ onOpenContact }: CostEstimatorProps) {
     const low = Math.round(total * 0.95);
     const high = Math.round(total * 1.08);
 
-    return { low: low.toLocaleString('de-DE'), high: high.toLocaleString('de-DE') };
+    return { 
+      low: low.toLocaleString('de-DE'), 
+      high: high.toLocaleString('de-DE'),
+      totalVal: total
+    };
   };
+
+  const estimate = calculateEstimate();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitted(true);
   };
 
-  const estimate = calculateEstimate();
+  const getWhatsAppLink = () => {
+    const text = `Hallo Alexander! Ich habe den Projekt-Rechner auf rheindorf.digital ausgefüllt:%0A- Fokus: ${projectFocus}%0A- Betrieb: ${companySize}%0A- Zusatzfunktion: ${extraFeatures}%0A- Geschätzter Richtwert: ${estimate.low} € - ${estimate.high} €.%0A%0ABitte melde dich bei mir für ein kurzes Erstgespräch!`;
+    return `https://wa.me/4916096351750?text=${text}`;
+  };
 
   return (
-    <section id="rechner" className="py-20 bg-[#0b0f19] text-white relative overflow-hidden">
+    <section id="rechner" className="py-24 bg-[#0e1626] text-white relative overflow-hidden border-b border-[#1e2c4a]/80">
       
       {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-4">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-14 space-y-4">
+          <div className="inline-flex items-center gap-2 bg-[#080c14] border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-emerald-400 text-xs font-semibold uppercase tracking-wider">
             <Calculator className="w-4 h-4" />
             <span>Kostenfreier Sofort-Rechner</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-balance">
-            Was kostet Ihr Digital-Projekt?
+          
+          <h2 className="font-outfit text-3xl sm:text-5xl font-extrabold text-white leading-tight">
+            Projekt-Kosten in <span className="text-emerald-400">60 Sekunden</span> schätzen.
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg mt-3 text-pretty">
-            Ermitteln Sie in 3 Klicks eine unverbindliche Orientierung für Ihre neue Website oder KI-Automation.
+          
+          <p className="text-slate-300 text-sm sm:text-base">
+            Wähle deine Anforderungen für eine transparente Richtwert-Kalkulation inklusive 100% Festpreisgarantie.
           </p>
         </div>
 
-        {/* Rechner Card IMMORTAL RULE 1 & 3 */}
-        <div className="bg-[#10172a]/95 border border-slate-700/80 backdrop-blur-xl rounded-2xl p-6 sm:p-10 shadow-2xl">
+        {/* Calculator Main Box */}
+        <div className="bg-[#080c14] border border-[#1e2c4a] rounded-3xl p-6 sm:p-10 shadow-2xl">
           
-          {/* IMMORTAL RULE 4: Progress Indicator with shrink-0 and generous spacing */}
-          <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-800 gap-2 overflow-x-auto no-scrollbar">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center gap-2.5 shrink-0">
+          {/* Progress Indicators */}
+          <div className="flex items-center justify-between gap-2 mb-8 pb-6 border-b border-[#1e2c4a]">
+            {[
+              { num: 1, label: 'Projektart' },
+              { num: 2, label: 'Betriebsgröße' },
+              { num: 3, label: 'Zusatz-Tools' },
+              { num: 4, label: 'Ergebnis' }
+            ].map((s) => (
+              <button
+                key={s.num}
+                onClick={() => setStep(s.num)}
+                className={`flex items-center gap-2 text-xs font-bold transition-colors cursor-pointer ${
+                  step === s.num
+                    ? 'text-emerald-400'
+                    : step > s.num
+                    ? 'text-slate-300'
+                    : 'text-slate-600'
+                }`}
+              >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors shrink-0 ${
-                    step >= i ? 'bg-emerald-500 text-slate-950 shadow-md font-bold' : 'bg-slate-800 text-slate-400 border border-slate-700'
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                    step === s.num
+                      ? 'bg-emerald-500 text-slate-950 shadow-md'
+                      : step > s.num
+                      ? 'bg-[#131d33] text-emerald-400'
+                      : 'bg-[#0e1626] text-slate-600'
                   }`}
                 >
-                  {i === 4 ? <Sparkles className="w-4 h-4" /> : i}
+                  {s.num}
                 </div>
-                <span className="text-xs font-semibold text-slate-200 whitespace-nowrap pr-2">
-                  {i === 1 && 'Projekt-Fokus'}
-                  {i === 2 && 'Betriebsgröße'}
-                  {i === 3 && 'Zusatz-Features'}
-                  {i === 4 && 'Ergebnis'}
-                </span>
-              </div>
+                <span className="hidden sm:inline">{s.label}</span>
+              </button>
             ))}
           </div>
 
-          {/* STEP 1: Projekt-Fokus */}
+          {/* STEP 1: Project Focus */}
           {step === 1 && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white text-center mb-6 font-display">
-                Schritt 1: Welches Ziel verfolgen Sie?
+            <div className="space-y-6 animate-in fade-in">
+              <h3 className="font-outfit text-xl font-bold text-white">
+                Schritt 1: Was ist das Hauptziel deines Projekts?
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  { id: 'website', title: 'High-End Website', desc: 'Verkaufsstarke Landingpage / Relaunch' },
-                  { id: 'ki', title: 'KI-Telefonassistent', desc: '24/7 Terminbuchung & Fragenbeantwortung' },
-                  { id: 'bundle', title: 'Website + KI-System', desc: 'Vollständige digitale Transformation' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => { setProjectFocus(item.id); setStep(2); }}
-                    className={`p-5 rounded-xl border text-left transition-all cursor-pointer ${
-                      projectFocus === item.id
-                        ? 'border-2 border-emerald-400 bg-emerald-950/40 text-white shadow-xl'
-                        : 'border-slate-800 bg-slate-900/90 hover:border-emerald-500/50 text-slate-200 hover:bg-slate-850'
-                    }`}
-                  >
-                    <h4 className="font-bold text-base mb-1 text-white">{item.title}</h4>
-                    <p className="text-xs text-slate-300 font-medium leading-relaxed">{item.desc}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* STEP 2: Betriebsgröße */}
-          {step === 2 && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white text-center mb-6 font-display">
-                Schritt 2: Für wie viele Mitarbeiter/Kunden?
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  { id: 'solo', title: 'Einzelselbstständig', desc: 'Freiberufler, Coach, Einzelfirma' },
-                  { id: 'team', title: 'Lokales Team (2–10)', desc: 'Handwerksbetrieb, Salon, Studio' },
-                  { id: 'enterprise', title: 'Wachstumsbetrieb (>10)', desc: 'Mehrere Standorte / Hohes Anrufvolumen' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => { setCompanySize(item.id); setStep(3); }}
-                    className={`p-5 rounded-xl border text-left transition-all cursor-pointer ${
-                      companySize === item.id
-                        ? 'border-2 border-emerald-400 bg-emerald-950/40 text-white shadow-xl'
-                        : 'border-slate-800 bg-slate-900/90 hover:border-emerald-500/50 text-slate-200 hover:bg-slate-850'
-                    }`}
-                  >
-                    <h4 className="font-bold text-base mb-1 text-white">{item.title}</h4>
-                    <p className="text-xs text-slate-300 font-medium leading-relaxed">{item.desc}</p>
-                  </button>
-                ))}
-              </div>
-              <div className="flex justify-start">
-                <button onClick={() => setStep(1)} className="text-xs text-slate-400 hover:text-white underline cursor-pointer">
-                  ← Zurück
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: Zusatz-Features */}
-          {step === 3 && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white text-center mb-6 font-display">
-                Schritt 3: Gewünschtes Zusatz-Modul?
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  { id: 'seo', title: 'Lokale SEO Köln/NRW', desc: 'Google Maps Top-3 Ranking Optimierung' },
-                  { id: 'showcase', title: 'Vorher/Nachher Showcase', desc: 'Interaktiver Vorher/Nachher Drag-Slider' },
-                  { id: 'standard', title: 'Standard Paket', desc: 'Ohne zusätzliche Spezial-Module' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => { setExtraFeatures(item.id); setStep(4); }}
-                    className={`p-5 rounded-xl border text-left transition-all cursor-pointer ${
-                      extraFeatures === item.id
-                        ? 'border-2 border-emerald-400 bg-emerald-950/40 text-white shadow-xl'
-                        : 'border-slate-800 bg-slate-900/90 hover:border-emerald-500/50 text-slate-200 hover:bg-slate-850'
-                    }`}
-                  >
-                    <h4 className="font-bold text-base mb-1 text-white">{item.title}</h4>
-                    <p className="text-xs text-slate-300 font-medium leading-relaxed">{item.desc}</p>
-                  </button>
-                ))}
-              </div>
-              <div className="flex justify-start">
-                <button onClick={() => setStep(2)} className="text-xs text-slate-400 hover:text-white underline cursor-pointer">
-                  ← Zurück
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 4: Ergebnis & Formular */}
-          {step === 4 && (
-            <div className="space-y-6 text-center">
               
-              {!isSubmitted ? (
-                <>
-                  <div className="bg-slate-950/90 p-6 rounded-xl border border-emerald-500/40 inline-block w-full shadow-inner">
-                    <span className="text-xs uppercase tracking-wider text-slate-300 font-semibold block mb-1">
-                      Geschätztes Pauschal-Budget (Einmalig, Kein Abo):
-                    </span>
-                    <span className="text-3xl sm:text-4xl font-display font-bold text-emerald-400 tabular-nums block">
-                      ca. {estimate.low} € – {estimate.high} €
-                    </span>
-                    <span className="text-xs text-slate-300 mt-2 block font-normal">
-                      Inklusive vollständiger Entwicklung, Einrichtung & 14-Tage Express-Umsetzung.
-                    </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  {
+                    id: 'website',
+                    title: 'High-End Webdesign Relaunch',
+                    sub: 'Moderne, superschnelle Website speziell für Kundenanfragen',
+                    tag: 'Bestseller'
+                  },
+                  {
+                    id: 'ki',
+                    title: '24/7 KI-Telefonassistent',
+                    sub: 'Smarte Sprach-KI für automatische Anruf- & Terminannahme',
+                    tag: 'Voice AI'
+                  },
+                  {
+                    id: 'bundle',
+                    title: 'Komplettpaket (Web + KI)',
+                    sub: 'Vollständiger Relaunch + intelligenter KI-Telefonassistent',
+                    tag: 'Empfehlung'
+                  }
+                ].map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setProjectFocus(item.id)}
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      projectFocus === item.id
+                        ? 'bg-[#0e1626] border-emerald-500 ring-1 ring-emerald-500 shadow-lg'
+                        : 'bg-[#0e1626]/60 border-[#1e2c4a] hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full inline-block mb-2">
+                        {item.tag}
+                      </span>
+                      <h4 className="font-outfit font-bold text-base text-white mb-1.5">{item.title}</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">{item.sub}</p>
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  <form onSubmit={handleFormSubmit} className="space-y-4 text-left max-w-md mx-auto pt-4">
-                    <p className="text-sm text-slate-200 font-semibold text-center">
-                      Fordern Sie jetzt das konkrete Festpreis-Angebot & die kostenlose Erstberatung an:
-                    </p>
+              <div className="flex justify-end pt-4">
+                <button
+                  onClick={() => setStep(2)}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <span>Weiter zu Schritt 2</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: Company Size */}
+          {step === 2 && (
+            <div className="space-y-6 animate-in fade-in">
+              <h3 className="font-outfit text-xl font-bold text-white">
+                Schritt 2: Für welchen Betrieb ist das System gedacht?
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  {
+                    id: 'solo',
+                    title: 'Einzelunternehmer & Meister',
+                    sub: '1–2 Personen (z.B. selbstständiger Handwerker, Studio-Inhaber)'
+                  },
+                  {
+                    id: 'team',
+                    title: 'Lokales KMU / Meisterbetrieb',
+                    sub: '3–15 Mitarbeiter mit festem Team & wachsendem Kundenstamm'
+                  },
+                  {
+                    id: 'enterprise',
+                    title: 'Größerer Betrieb & Filialen',
+                    sub: '15+ Mitarbeiter mit mehreren Standorten oder Spezialgewerken'
+                  }
+                ].map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setCompanySize(item.id)}
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      companySize === item.id
+                        ? 'bg-[#0e1626] border-emerald-500 ring-1 ring-emerald-500 shadow-lg'
+                        : 'bg-[#0e1626]/60 border-[#1e2c4a] hover:border-slate-700'
+                    }`}
+                  >
                     <div>
-                      <div className="relative">
-                        <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-                        <input
-                          type="text"
-                          required
-                          placeholder="Ihr Name / Unternehmensname"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
-                        />
-                      </div>
+                      <h4 className="font-outfit font-bold text-base text-white mb-1.5">{item.title}</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">{item.sub}</p>
                     </div>
-
-                    <div>
-                      <div className="relative">
-                        <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-                        <input
-                          type="tel"
-                          required
-                          placeholder="Telefonnummer für Rückfragen"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="relative">
-                        <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-                        <input
-                          type="email"
-                          required
-                          placeholder="E-Mail-Adresse"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-slate-950 font-bold py-3.5 px-6 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <span>Festpreis-Angebot anfordern</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                    
-                    <p className="text-[11px] text-slate-400 text-center">
-                      🔒 Unverbindlich & Kostenlos. Antwort innerhalb von 24h.
-                    </p>
-                  </form>
-                </>
-              ) : (
-                <div className="py-8 space-y-4">
-                  <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto border border-emerald-500/40">
-                    <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h4 className="text-2xl font-bold text-white font-display">
-                    Vielen Dank, {name}!
-                  </h4>
-                  <p className="text-slate-200 text-sm max-w-md mx-auto">
-                    Ich habe Ihre Anfrage erhalten und melde mich innerhalb von 24 Stunden persönlich bei Ihnen unter <strong className="text-emerald-400">{phone}</strong>.
-                  </p>
+                ))}
+              </div>
+
+              <div className="flex justify-between pt-4">
+                <button
+                  onClick={() => setStep(1)}
+                  className="bg-[#0e1626] text-slate-300 border border-[#1e2c4a] text-xs font-bold uppercase tracking-wider px-5 py-3.5 rounded-xl cursor-pointer"
+                >
+                  Zurück
+                </button>
+                <button
+                  onClick={() => setStep(3)}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <span>Weiter zu Schritt 3</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: Extra Features */}
+          {step === 3 && (
+            <div className="space-y-6 animate-in fade-in">
+              <h3 className="font-outfit text-xl font-bold text-white">
+                Schritt 3: Welche Zusatz-Tools wünschst du dir?
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  {
+                    id: 'none',
+                    title: 'Standard High-End Setup',
+                    sub: 'Inklusive Mobile-First, DSGVO, SSL & modernstem Styling'
+                  },
+                  {
+                    id: 'seo',
+                    title: 'Local SEO & Google Maps Turbo',
+                    sub: 'Schema.org JSON-LD & regionale Keyword-Optimierung für Köln/NRW'
+                  },
+                  {
+                    id: 'showcase',
+                    title: 'Interaktiver Kunden-Rechner / Slider',
+                    sub: 'Individueller Kostenkalkulator oder Vorher/Nachher-Slider als Lead-Magnet'
+                  }
+                ].map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setExtraFeatures(item.id)}
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      extraFeatures === item.id
+                        ? 'bg-[#0e1626] border-emerald-500 ring-1 ring-emerald-500 shadow-lg'
+                        : 'bg-[#0e1626]/60 border-[#1e2c4a] hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <h4 className="font-outfit font-bold text-base text-white mb-1.5">{item.title}</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">{item.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-between pt-4">
+                <button
+                  onClick={() => setStep(2)}
+                  className="bg-[#0e1626] text-slate-300 border border-[#1e2c4a] text-xs font-bold uppercase tracking-wider px-5 py-3.5 rounded-xl cursor-pointer"
+                >
+                  Zurück
+                </button>
+                <button
+                  onClick={() => setStep(4)}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <span>Ergebnis Berechnen</span>
+                  <Sparkles className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: Live Result & Actions */}
+          {step === 4 && (
+            <div className="space-y-8 animate-in fade-in">
+              
+              <div className="text-center bg-[#0e1626] border border-emerald-500/40 p-8 rounded-3xl space-y-3">
+                <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                  Geschätzter Richtwert (Pauschal / Einmalig)
+                </span>
+                
+                <div className="font-outfit text-4xl sm:text-6xl font-black text-white">
+                  {estimate.low} € – {estimate.high} €
                 </div>
-              )}
+                
+                <p className="text-xs text-slate-300 max-w-lg mx-auto leading-relaxed">
+                  Inklusive 100% Festpreisgarantie, 14 Tagen Umsetzungszeit, Responsive Design, SSL & Quellcode-Übergabe.
+                </p>
+              </div>
 
-              <div className="flex justify-center pt-4">
-                <button onClick={() => setStep(1)} className="text-xs text-slate-400 hover:text-white underline cursor-pointer">
-                  Neuberechnen
+              {/* Direct Actions */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a
+                  href={getWhatsAppLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 font-bold text-xs uppercase tracking-wider p-4 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Kalkulation per WhatsApp senden</span>
+                </a>
+
+                <button
+                  onClick={onOpenContact}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold text-xs uppercase tracking-wider p-4 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Unverbindliches Erstgespräch anfragen</span>
+                </button>
+              </div>
+
+              <div className="text-center pt-2">
+                <button
+                  onClick={() => setStep(1)}
+                  className="text-xs text-slate-400 hover:text-white underline cursor-pointer"
+                >
+                  Kalkulation von vorne beginnen
                 </button>
               </div>
 

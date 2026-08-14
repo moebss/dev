@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { ExternalLink, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ExternalLink, Sparkles, ArrowRight, ShieldCheck, Star, Bot, CheckCircle2 } from 'lucide-react';
 
 import userImg1 from '../images/media_1786244763224.png';
 import userImg2 from '../images/media_1786244838088.png';
 import userImg3 from '../images/media_1786244996672.png';
 import userImg4 from '../images/media_1786372914462.png';
 import userImg5 from '../images/media_1786374893160.png';
-import heroImg from '../images/hero_rheindorf.jpg';
 import aiAutomationImg from '../images/ai_automation.jpg';
 
 interface PortfolioProps {
@@ -18,107 +17,127 @@ export default function Portfolio({ onOpenContact }: PortfolioProps) {
 
   const projects = [
     {
+      id: 'alyas-barber',
+      category: 'beauty',
+      categoryLabel: 'Barbershop & Herrensalon',
+      title: 'Alyas Barbershop Horrem',
+      location: 'Kerpen-Horrem (Bahnhofstraße 14)',
+      desc: '100vh Full-Bleed Dark Luxury Experience mit Fraunces-Typografie, interaktivem Style-Kalkulator & 1-Klick WhatsApp Terminbuchung.',
+      stats: '4.9 ★ Top-Bewertet in Horrem',
+      tags: ['100vh Cinematic Hero', 'Style-Rechner', 'DSGVO §5 DDG', 'Local SEO'],
+      liveUrl: 'https://moebss.github.io/alyas-barbershop-horrem/',
+      img: userImg2,
+      badge: 'Live Projekt'
+    },
+    {
+      id: 'burning-bandit',
+      category: 'tattoo',
+      categoryLabel: 'Tattoo & Fine Art',
+      title: 'The Burning Bandit (Independent Ink)',
+      location: 'Kerpen-Horrem (Hauptstraße 231)',
+      desc: 'Dark Craft Atmosphäre in Champagner-Gold mit interaktivem Cover-Up Transformations-Slider, Artist-Showcase & 3-Schritt Preiskalkulator.',
+      stats: '4.8 ★ bei 160+ Google Reviews',
+      tags: ['Vorher/Nachher-Slider', 'Tattoo-Kalkulator', 'Resident Artists', 'Self-Hosted Fonts'],
+      liveUrl: 'https://moebss.github.io/the-burning-bandit-kerpen/',
+      img: userImg4,
+      badge: 'Live Projekt'
+    },
+    {
+      id: 'nails-shop',
+      category: 'beauty',
+      categoryLabel: 'Boutique Nagelstudio & Spa',
+      title: 'The Nails Shop Horrem',
+      location: 'Kerpen-Horrem (Hauptstraße 18)',
+      desc: 'Sinnliches Premium-Design in warmem Leinen & Dusty Rose mit echtem Live Instagram-Embed Feed, Babyboomer-Slider & Online-Terminanfrage.',
+      stats: '4.9 ★ (100+ Google Bewertungen)',
+      tags: ['Live Instagram Feed', 'Babyboomer Slider', 'Spa Ästhetik', '100% DSGVO'],
+      liveUrl: 'https://moebss.github.io/the-nails-shop-horrem/',
+      img: userImg5,
+      badge: 'Live Projekt'
+    },
+    {
       id: 'az-heizung',
       category: 'handwerk',
       categoryLabel: 'Sanitär & Heizungstausch',
       title: 'AZ Heizung-Sanitär Fachverkauf',
       location: 'Horrem / Erftkreis',
-      desc: 'XXL Badsanierung & Heizungstausch Plattform mit Notdienst-Notruf, 3D-Kostenrechner & Meisterbetrieb-Garantie.',
+      desc: 'XXL Badsanierung & Heizungstausch Plattform mit Notdienst-Notruf, interaktivem 3D-Kostenrechner & Google Maps Local SEO Dominanz.',
       stats: '+300% mehr Anfragen im 1. Monat',
-      tags: ['Badsanierungs-Rechner', 'Wärmepumpe', 'Local SEO Horrem'],
+      tags: ['Badsanierungs-Rechner', 'Notfall-Routing', 'Meisterbetrieb Local SEO'],
       liveUrl: 'https://moebss.github.io/az-heizung-sanitaer/',
-      img: userImg1
+      img: userImg1,
+      badge: 'Case Study'
     },
     {
-      id: 'schmitz-hairline',
-      category: 'beauty',
-      categoryLabel: 'Friseur & Beauty Boutique',
-      title: 'Schmitz Guido Hairline',
-      location: 'Köln / Horrem',
-      desc: 'Boutique Luxury Editorial Auftritt mit Online-Terminbuchung, Vorher/Nachher-Styling & Instagram-Feed Integration.',
-      stats: '+45% Neukunden-Termine',
-      tags: ['Boutique Editorial', 'Online-Buchung', 'Stylist Showcase'],
-      liveUrl: 'https://moebss.github.io/schmitz-hairline/',
-      img: userImg2
+      id: 'ki-voice',
+      category: 'ai',
+      categoryLabel: 'Voice AI & Telefon-Automation',
+      title: '24/7 KI-Telefonassistent für Handwerker',
+      location: 'Köln / NRW',
+      desc: 'Intelligente Telefon-KI, die Anrufe auf der Baustelle automatisch entgegennimmt, Kundenanliegen qualifiziert und Termine direkt in den Kalender einträgt.',
+      stats: '0 verpasste Kundenanrufe mehr',
+      tags: ['Sprach-KI (Voice AI)', 'Google Kalender Sync', 'WhatsApp-Zusammenfassung', 'Handwerker-Automation'],
+      liveUrl: '#ki-telefonie',
+      img: aiAutomationImg,
+      badge: 'KI-Lösung'
     },
     {
       id: 'smoky-shop',
-      category: 'ecommerce',
+      category: 'lifestyle',
       categoryLabel: 'Shisha & Genussmittel',
       title: 'Smoky Head&Shisha Shop Horrem',
       location: 'Horrem (Seit 2013)',
-      desc: 'SmokeFactory Dark Editorial mit warmem Amber-Glow, Facebook-Banner Integration & 1-Klick WhatsApp Support.',
-      stats: 'Seit 2013 etabliert in Horrem',
-      tags: ['Dark Gold Editorial', 'Facebook-Banner', 'WhatsApp Direct'],
+      desc: 'Dark Editorial Webauftritt mit warmem Amber-Glow, Facebook-Banner Integration, Tabak-Katalog & 1-Klick WhatsApp Sofort-Support.',
+      stats: 'Etablierter Marktführer seit 2013',
+      tags: ['Dark Amber Design', 'WhatsApp Direct', 'Lokale Markenautorität'],
       liveUrl: 'https://moebss.github.io/smoky-headshop-horrem/',
-      img: userImg3
-    },
-    {
-      id: 'handwerk-nawrath',
-      category: 'handwerk',
-      categoryLabel: 'Trockenbau & Sanierung',
-      title: 'Handwerkerservice Nawrath',
-      location: 'Erftstadt / Köln',
-      desc: 'Robuste Handwerker-Landingpage mit Express-Anfrage-Funnel & 100% Festpreis-Garantie.',
-      stats: 'Ausgebucht für 6 Wochen',
-      tags: ['Express-Funnel', 'Trockenbau', 'Mobile First'],
-      liveUrl: 'https://moebss.github.io/handwerkerservice-nawrath/',
-      img: userImg4
-    },
-    {
-      id: 'barth-beratung',
-      category: 'consulting',
-      categoryLabel: 'Unternehmensberatung & BwB',
-      title: 'Klaus Barth GmbH Beratung',
-      location: 'NRW / Erftkreis',
-      desc: 'Executive Navy Corporate Portal mit BWA-Erfolgsberichten & digitalem Aufmaß-Rechner.',
-      stats: '100% digitale BwB Prozesse',
-      tags: ['Executive Navy', 'BWA-Reports', 'B2B Portal'],
-      liveUrl: 'https://moebss.github.io/klaus-barth-beratung/',
-      img: userImg5
+      img: userImg3,
+      badge: 'Live Projekt'
     }
   ];
 
-  const filteredProjects = activeFilter === 'all' 
-    ? projects 
+  const filteredProjects = activeFilter === 'all'
+    ? projects
     : projects.filter(p => p.category === activeFilter);
 
   return (
-    <section id="portfolio" className="py-20 bg-[#0b0f19] border-b border-slate-800">
+    <section id="projekte" className="py-24 bg-[#0e1626] border-b border-[#1e2c4a]/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-xs font-bold tracking-widest text-emerald-400 uppercase bg-slate-900 border border-emerald-500/30 px-3.5 py-1.5 rounded-full">
-            Erfolgsgeschichten & Echte Kunden-Demos
+        <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
+          <span className="text-xs font-semibold tracking-widest text-emerald-400 uppercase bg-[#080c14] border border-emerald-500/30 px-3.5 py-1.5 rounded-full inline-block">
+            Echte Kundenprojekte & Live-Referenzen
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-4 text-balance">
-            Ausgewählte Kundenprojekte
+          <h2 className="font-outfit text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+            Maßgeschneiderte Webauftritte, <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">die Kunden gewinnen</span>.
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg mt-4 text-pretty">
-            Ein Auszug aus unseren fertig umgesetzten Webdesign- und KI-Automations-Projekten in Köln & NRW.
+          <p className="text-slate-300 text-base sm:text-lg font-normal">
+            Keine theoretischen Entwürfe. Klicke auf die Live-Demos und teste echte Ergebnisse, Ladezeiten und Lead-Generatoren.
           </p>
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-4 mb-10 no-scrollbar">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-14">
           {[
-            { id: 'all', label: 'Alle 16 Demos' },
-            { id: 'handwerk', label: 'Sanitär & Handwerk' },
-            { id: 'beauty', label: 'Friseur & Beauty' },
-            { id: 'ecommerce', label: 'Shisha & Retail' },
-            { id: 'consulting', label: 'B2B & Beratung' },
-          ].map((tab) => (
+            { id: 'all', label: 'Alle Projekte' },
+            { id: 'beauty', label: 'Salons & Barbershops' },
+            { id: 'tattoo', label: 'Tattoo Studios' },
+            { id: 'handwerk', label: 'Handwerk & Sanitär' },
+            { id: 'ai', label: 'KI-Automationen' },
+            { id: 'lifestyle', label: 'Retail & Shops' }
+          ].map((f) => (
             <button
-              key={tab.id}
-              onClick={() => setActiveFilter(tab.id)}
-              className={`px-4 py-2.5 rounded-xl font-semibold text-xs whitespace-nowrap transition-all cursor-pointer ${
-                activeFilter === tab.id
-                  ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-                  : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+              key={f.id}
+              onClick={() => setActiveFilter(f.id)}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                activeFilter === f.id
+                  ? 'bg-emerald-500 text-slate-950 font-bold shadow-lg shadow-emerald-500/25'
+                  : 'bg-[#080c14] text-slate-300 hover:text-white border border-[#1e2c4a] hover:border-emerald-500/40'
               }`}
             >
-              {tab.label}
+              {f.label}
             </button>
           ))}
         </div>
@@ -126,65 +145,116 @@ export default function Portfolio({ onOpenContact }: PortfolioProps) {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => (
-            <div 
+            <div
               key={project.id}
-              className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-emerald-500/40 transition-all flex flex-col justify-between group"
+              className="group bg-[#080c14] border border-[#1e2c4a] rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between hover:border-emerald-500/50 hover:shadow-2xl transition-all duration-300"
             >
               <div>
-                {/* Project Image */}
-                <div className="relative aspect-video overflow-hidden bg-slate-950">
-                  <img 
-                    src={project.img} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                {/* Visual Header with Real Screenshot */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
+                  <img
+                    src={project.img}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-[0.92] contrast-[1.05]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080c14] via-transparent to-transparent" />
                   
-                  <span className="absolute top-3 left-3 text-[10px] font-extrabold uppercase tracking-wider bg-slate-950/80 backdrop-blur-md text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-md">
-                    {project.categoryLabel}
-                  </span>
+                  {/* Badge */}
+                  <div className="absolute top-4 left-4 bg-emerald-500 text-slate-950 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full flex items-center gap-1.5 shadow-md">
+                    <Sparkles className="w-3 h-3" />
+                    <span>{project.badge}</span>
+                  </div>
+
+                  <div className="absolute bottom-3 right-3 bg-[#0e1626]/90 backdrop-blur-md border border-[#1e2c4a] px-3 py-1 rounded-xl text-[11px] font-semibold text-emerald-400">
+                    {project.location}
+                  </div>
                 </div>
 
-                {/* Project Details */}
-                <div className="p-6 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-extrabold text-white group-hover:text-emerald-400 transition-colors">
+                {/* Content */}
+                <div className="p-6 sm:p-7 space-y-4">
+                  <div>
+                    <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider block">
+                      {project.categoryLabel}
+                    </span>
+                    <h3 className="font-outfit text-2xl font-bold text-white leading-snug mt-1">
                       {project.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs text-slate-400 font-semibold">{project.location}</p>
-                  
-                  <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                     {project.desc}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {project.tags.map((tag, idx) => (
-                      <span key={idx} className="text-[10px] bg-slate-950 text-slate-400 border border-slate-800 px-2 py-0.5 rounded font-mono">
-                        #{tag}
+                  <div className="bg-[#0e1626] p-3 rounded-xl border border-[#1e2c4a] flex items-center gap-2 text-xs font-semibold text-emerald-400">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{project.stats}</span>
+                  </div>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {project.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="text-[10px] bg-[#131d33] text-slate-300 border border-[#1e2c4a] px-2.5 py-1 rounded-lg"
+                      >
+                        {tag}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Action Link */}
-              <div className="p-6 pt-0 border-t border-slate-800/80 mt-4 flex items-center justify-between">
-                <span className="text-xs font-bold text-emerald-400">{project.stats}</span>
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition-all flex items-center gap-1.5"
-                >
-                  <span>Demo Live ansehen</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
-                </a>
+              {/* Bottom Action */}
+              <div className="p-6 pt-0">
+                {project.liveUrl.startsWith('http') ? (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#0e1626] hover:bg-emerald-500 hover:text-slate-950 text-white border border-[#1e2c4a] hover:border-emerald-400 text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer group/btn shadow-md"
+                  >
+                    <span>Live-Website Öffnen</span>
+                    <ExternalLink className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                  </a>
+                ) : (
+                  <a
+                    href={project.liveUrl}
+                    className="w-full bg-[#0e1626] hover:bg-emerald-500 hover:text-slate-950 text-white border border-[#1e2c4a] hover:border-emerald-400 text-xs font-bold uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer group/btn shadow-md"
+                  >
+                    <span>Mehr zur KI-Lösung</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                  </a>
+                )}
               </div>
-
             </div>
           ))}
+        </div>
+
+        {/* Global Portfolio CTA Banner */}
+        <div className="mt-16 bg-[#080c14] border border-[#1e2c4a] p-7 sm:p-10 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xl">
+          <div className="space-y-2 text-center lg:text-left">
+            <h4 className="font-outfit text-2xl sm:text-3xl font-bold text-white">
+              Bereit für einen <span className="text-emerald-400">High-End Webauftritt</span> für deinen Betrieb?
+            </h4>
+            <p className="text-slate-400 text-xs sm:text-sm max-w-2xl">
+              100% Festpreis, 14 Tage Express-Umsetzung, schlüsselfertig mit SEO, Impressum & interaktiven Kunden-Rechnern.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <a
+              href="tel:016096351750"
+              className="bg-[#0e1626] hover:bg-[#131d33] text-white border border-[#1e2c4a] px-5 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors"
+            >
+              0160 96351750
+            </a>
+            <button
+              onClick={onOpenContact}
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold text-xs uppercase tracking-wider px-7 py-3.5 rounded-xl shadow-lg transition-colors cursor-pointer"
+            >
+              Projekt Anfragen
+            </button>
+          </div>
         </div>
 
       </div>
